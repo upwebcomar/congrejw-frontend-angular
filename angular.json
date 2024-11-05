@@ -9,7 +9,7 @@
         "@schematics/angular:component": {
           "skipTests": true,
           "inlineStyle": true,
-          "inlineTemplate": true
+          "inlineTemplate": false
         }
       },
       "root": "",
@@ -37,7 +37,8 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+            ]
           },
           "configurations": {
             "production": {
