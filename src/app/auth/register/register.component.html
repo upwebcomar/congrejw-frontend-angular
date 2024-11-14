@@ -1,64 +1,66 @@
 <div class="register-container container">
-    <h2 class="text-center mb-4">Registro de Usuario</h2>
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="col-md-6 offset-md-3">
-      
-      <!-- Nombre -->
-      <div class="mb-3">
-        <label for="name" class="form-label">Nombre completo:</label>
-        <input id="name" formControlName="name" type="text" class="form-control" />
-        <div *ngIf="registerForm.get('name')?.invalid && (registerForm.get('name')?.touched || registerForm.get('name')?.dirty)">
-          <small *ngIf="registerForm.get('name')?.errors?.['required']" class="text-danger">
-            El nombre completo es obligatorio.
-          </small>
-        </div>
+  <h2 class="text-center mb-4">Registro de Usuario</h2>
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="col-md-6 offset-md-3">
+  
+    <!-- Nombre -->
+    <div class="mb-3">
+      <label for="username" class="form-label">Nombre completo:</label>
+      <input id="username" formControlName="username" type="text" class="form-control" />
+      <div *ngIf="registerForm.get('username')?.invalid && (registerForm.get('username')?.touched || registerForm.get('username')?.dirty)">
+        <small *ngIf="registerForm.get('username')?.errors?.['required']" class="text-danger">
+          El nombre completo es obligatorio.
+        </small>
       </div>
-  
-      <!-- Correo Electrónico -->
-      <div class="mb-3">
-        <label for="email" class="form-label">Correo electrónico:</label>
-        <input id="email" formControlName="email" type="email" class="form-control" />
-        <div *ngIf="registerForm.get('email')?.invalid && (registerForm.get('email')?.touched || registerForm.get('email')?.dirty)">
-          <small *ngIf="registerForm.get('email')?.errors?.['required']" class="text-danger">
-            El correo electrónico es obligatorio.
-          </small>
-          <small *ngIf="registerForm.get('email')?.errors?.['email']" class="text-danger">
-            Ingresa un correo electrónico válido.
-          </small>
-        </div>
+    </div>
+
+    <!-- Correo Electrónico -->
+    <div class="mb-3">
+      <label for="email" class="form-label">Correo electrónico:</label>
+      <input id="email" formControlName="email" type="email" class="form-control" />
+      <div *ngIf="registerForm.get('email')?.invalid && (registerForm.get('email')?.touched || registerForm.get('email')?.dirty)">
+        <small *ngIf="registerForm.get('email')?.errors?.['required']" class="text-danger">
+          El correo electrónico es obligatorio.
+        </small>
+        <small *ngIf="registerForm.get('email')?.errors?.['email']" class="text-danger">
+          Ingresa un correo electrónico válido.
+        </small>
       </div>
-  
-      <!-- Contraseña -->
-      <div class="mb-3">
-        <label for="password" class="form-label">Contraseña:</label>
-        <input id="password" formControlName="password" type="password" class="form-control" />
-        <div *ngIf="registerForm.get('password')?.invalid && (registerForm.get('password')?.touched || registerForm.get('password')?.dirty)">
-          <small *ngIf="registerForm.get('password')?.errors?.['required']" class="text-danger">
-            La contraseña es obligatoria.
-          </small>
-        </div>
+    </div>
+
+    <!-- Contraseña -->
+    <div class="mb-3">
+      <label for="password" class="form-label">Contraseña:</label>
+      <input id="password" formControlName="password" type="password" class="form-control" />
+      <div *ngIf="registerForm.get('password')?.invalid && (registerForm.get('password')?.touched || registerForm.get('password')?.dirty)">
+        <small *ngIf="registerForm.get('password')?.errors?.['required']" class="text-danger">
+          La contraseña es obligatoria.
+        </small>
+        <small *ngIf="registerForm.get('password')?.errors?.['minlength']" class="text-danger">
+          La contraseña debe tener al menos 6 caracteres.
+        </small>
       </div>
-  
-      <!-- Confirmar Contraseña -->
-      <div class="mb-3">
-        <label for="confirmPassword" class="form-label">Confirmar contraseña:</label>
-        <input id="confirmPassword" formControlName="confirmPassword" type="password" class="form-control" />
-        <div *ngIf="registerForm.get('confirmPassword')?.invalid && (registerForm.get('confirmPassword')?.touched || registerForm.get('confirmPassword')?.dirty)">
-          <small *ngIf="registerForm.get('confirmPassword')?.errors?.['required']" class="text-danger">
-            Debes confirmar la contraseña.
-          </small>
-          <small *ngIf="registerForm.get('confirmPassword')?.errors?.['notSame']" class="text-danger">
-            Las contraseñas no coinciden.
-          </small>
-        </div>
+    </div>
+
+    <!-- Confirmar Contraseña -->
+    <div class="mb-3">
+      <label for="confirmPassword" class="form-label">Confirmar contraseña:</label>
+      <input id="confirmPassword" formControlName="confirmPassword" type="password" class="form-control" />
+      <div *ngIf="registerForm.get('confirmPassword')?.invalid && (registerForm.get('confirmPassword')?.touched || registerForm.get('confirmPassword')?.dirty)">
+        <small *ngIf="registerForm.get('confirmPassword')?.errors?.['required']" class="text-danger">
+          Debes confirmar la contraseña.
+        </small>
+        <small *ngIf="registerForm.get('confirmPassword')?.errors?.['notSame']" class="text-danger">
+          Las contraseñas no coinciden.
+        </small>
       </div>
-  
-      <!-- Botón de registro -->
-      <div class="d-flex justify-content-center">
-        <button type="submit" [disabled]="loading" class="btn btn-primary w-100">Registrar</button>
-      </div>
-  
-      <!-- Mensaje de error -->
-      <div *ngIf="error" class="alert alert-danger mt-3">{{ error }}</div>
-    </form>
-  </div>
-  
+    </div>
+
+    <!-- Botón de registro -->
+    <div class="d-flex justify-content-center">
+      <button type="submit" [disabled]="loading || registerForm.invalid" class="btn btn-primary w-100">Registrar</button>
+    </div>
+
+    <!-- Mensaje de error -->
+    <div *ngIf="error" class="alert alert-danger mt-3">{{ error }}</div>
+  </form>
+</div>
