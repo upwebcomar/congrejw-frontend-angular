@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { AppStateService } from './app-state.service';
+import { environment } from '../environments/environment';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +11,13 @@ import { AppStateService } from './app-state.service';
   templateUrl: './app.component.html',
   styles:``
 })
-export class AppComponent {
-  title = 'congrejw';
+export class AppComponent implements OnInit {
+  constructor(private title:Title){}
+  ngOnInit(): void {
+    //Indica con que entorno esta trabajando la aplicacion
+    console.log('Entorno actual:', environment.production ? 'Producción' : 'Desarrollo');
+    //Modifico el Title de la app
+  this.title.setTitle(`${environment.appName}`) 
+  }
+  
 }

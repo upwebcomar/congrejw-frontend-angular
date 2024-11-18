@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, ViewChild, OnDestroy, OnInit } fr
 import { Subscription } from 'rxjs';
 import { NavbarService } from './navbar.service';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import { AppStateService } from '../../app-state.service';
+import { AppStateService } from '../../services/app-state.service';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({

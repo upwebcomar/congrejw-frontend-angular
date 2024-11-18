@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { AppStateService } from '../../app-state.service';
+import { AppStateService } from '../../services/app-state.service';
+import { LoggerService } from '../../services/logger.service';
 
 @Component({
   selector: 'app-home',
@@ -10,12 +11,12 @@ import { AppStateService } from '../../app-state.service';
   styles: ``
 })
 export class HomeComponent implements OnInit {
+  private readonly context = 'HomeComponent';
   constructor(
-    private appState:AppStateService
+    private appState:AppStateService,
+    private logger:LoggerService
   ){}
   ngOnInit(): void {
-    this.appState.userState$.subscribe(data => console.log(data));
-    
-    
+
   }
 }

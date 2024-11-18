@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { NavbarService } from '../components/navbar/navbar.service';
-import { AppStateService } from '../app-state.service';
+import { AppStateService } from '../services/app-state.service';
 
 @Component({
   selector: 'app-micuenta',

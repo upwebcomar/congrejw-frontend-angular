@@ -4,7 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NavbarService } from '../../components/navbar/navbar.service';
-import { AppStateService } from '../../app-state.service';
+import { AppStateService } from '../../services/app-state.service';
+import { environment } from '../../../environments/environment';
+
 
 @Component({
   selector: 'app-login',
@@ -17,7 +19,7 @@ export class LoginComponent {
   loginForm: FormGroup;
   loading = false;
   error = '';
-  
+  private context:string = 'LoginComponent'
 
 
   constructor(
@@ -43,16 +45,15 @@ export class LoginComponent {
     const { username, password } = this.loginForm.value;
  
     
-    this.http.post<{ access_token: string }>('http://localhost:3000/auth/login', { username, password })
+    this.http.post<{ access_token: string }>(`${environment.apiUrl}/auth/login`, { username, password })
       .subscribe({
         next: (response) => {
           localStorage.setItem('access_token', response.access_token);
 
-          this.appstate.setUserState(username)
+          this.appstate.setUserState(username,this.context)
           this.appstate.setLoggedState(true)
           this.navbarService.updateLoginHref('micuenta')
           this.cdr.detectChanges()
-          console.log(username);
           
           this.router.navigate(['/']); // Redirigir a la página principal o a donde quieras
         },

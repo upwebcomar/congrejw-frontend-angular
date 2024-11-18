@@ -1,23 +1,29 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, combineLatest, map } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { LoggerService } from './logger.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppStateService {
+  private readonly context = 'AppStateService';
+
   private username = new BehaviorSubject<string>('Inicio Sesion');
   userState$: Observable<string> = this.username.asObservable();
 
   private logged = new BehaviorSubject<boolean>(false);
   logged$: Observable<boolean> = this.logged.asObservable();
 
-  constructor(){console.log('Inicio AppStateService');
+  constructor(
+      private logger:LoggerService
+      ){
+        this.logger.log(this.context,'AppStateService funcionando');
   }
 
 
-  setUserState(username: string): void {
+  setUserState(username: string, context:string): void {
     this.username.next(username);
-    console.log('Updated Username:', username);
+    this.logger.log(context,` setUserState():${username}`);
   }
 
   setLoggedState(data: boolean): void {
