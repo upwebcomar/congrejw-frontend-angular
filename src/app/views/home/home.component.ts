@@ -12,6 +12,7 @@ import { LoggerService } from '../../services/logger.service';
 })
 export class HomeComponent implements OnInit {
   private readonly context = 'HomeComponent';
+  
   constructor(
     private appState:AppStateService,
     private logger:LoggerService

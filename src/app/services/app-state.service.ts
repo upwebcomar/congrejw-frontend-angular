@@ -8,7 +8,7 @@ import { LoggerService } from './logger.service';
 export class AppStateService {
   private readonly context = 'AppStateService';
 
-  private username = new BehaviorSubject<string>('Inicio Sesion');
+  private username = new BehaviorSubject<string>('Sesión');
   userState$: Observable<string> = this.username.asObservable();
 
   private logged = new BehaviorSubject<boolean>(false);

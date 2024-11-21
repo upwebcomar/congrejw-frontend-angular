@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class NavbarService {
-  private loginTextSource = new BehaviorSubject<string>('Inicio Sesión');
+  private loginTextSource = new BehaviorSubject<string>('-');
   private loginHrefSource = new BehaviorSubject<string>('login');
   loginText$ = this.loginTextSource.asObservable();
   loginHref$ = this.loginHrefSource.asObservable();
@@ -17,4 +17,5 @@ export class NavbarService {
   updateLoginHref(path: string) {
     this.loginHrefSource.next(path);
   }
+
 }

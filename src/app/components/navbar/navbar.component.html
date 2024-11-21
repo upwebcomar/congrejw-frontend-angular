@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container d-flex">
       <a class="navbar-brand" href="#">
-        <img src="bootstrap-logo.svg" alt="Bootstrap" width="30" height="24">
+        <img src="nav-brand-icon.svg" alt="Bootstrap" width="30" height="24">
         CongreJW
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,17 +15,19 @@
           <li class="nav-item">
             <a #login class="nav-link" [routerLink] ="loginLink">Mi Cuenta</a>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Menu
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Tablero Anuncios</a></li>
-              <li><a class="dropdown-item" href="#">Discurso Publico</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-          </li>
+          <ng-container *ngIf="isLogged" >
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Menu
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="tableroanun">Tablero Anuncios</a></li>
+                <li><a class="dropdown-item" href="#">Discurso Publico</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+              </ul>
+            </li>
+          </ng-container>
           <li class="nav-item"><a class="nav-link">
             Ayuda</a>
           </li>
