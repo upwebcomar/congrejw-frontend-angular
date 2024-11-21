@@ -4,7 +4,7 @@ import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { JwtModule } from '@auth0/angular-jwt';
 
 import { routes } from './app.routes';
-import { AuthInterceptor } from './auth/auth.interceptor';
+import { environment } from '../environments/environment';
 
 export function tokenGetter() {
   return localStorage.getItem('access_token');
@@ -21,8 +21,8 @@ export const appConfig: ApplicationConfig = {
       JwtModule.forRoot({
         config: {
           tokenGetter,
-          allowedDomains: ['localhost:3000'],
-          disallowedRoutes: ['http://localhost:3000/auth/login'],
+          allowedDomains: environment.allowedDomains,
+          disallowedRoutes: environment.disallowedRoutes,
         },
       })
     ),

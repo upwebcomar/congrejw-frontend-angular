@@ -10,7 +10,7 @@
       <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
         <ul class="navbar-nav mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link" href="#">Inicio</a>
+            <a class="nav-link" [routerLink] ="'/'">Inicio</a>
           </li>
           <li class="nav-item">
             <a #login class="nav-link" [routerLink] ="loginLink">Mi Cuenta</a>
@@ -21,7 +21,7 @@
                 Menu
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="tableroanun">Tablero Anuncios</a></li>
+                <li><a class="dropdown-item" [routerLink] = "'tablero-anuncios'">Tablero Anuncios</a></li>
                 <li><a class="dropdown-item" href="#">Discurso Publico</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="#">Something else here</a></li>
