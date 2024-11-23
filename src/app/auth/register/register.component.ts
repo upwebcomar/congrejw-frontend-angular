@@ -2,13 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
-import { RegisterDto } from '../dto/register.dto';
+import { Router } from '@angular/router';
+import { LoggerService } from '../../services/logger.service';
 
 @Component({
   selector: 'app-register',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],  // Importaciones necesarias para un componente standalone
-  providers: [AuthService],
+  providers: [AuthService,LoggerService],
   templateUrl: './register.component.html',
   styles: ''
 })
@@ -18,7 +19,12 @@ export class RegisterComponent implements OnInit {
   loading: boolean = false;
   error: string = '';
 
-  constructor(private fb: FormBuilder, private authservice: AuthService) { }
+  constructor(
+    private fb: FormBuilder,
+    private authservice: AuthService,
+    private router:Router,
+    private logger:LoggerService
+  ) { }
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
@@ -47,11 +53,12 @@ export class RegisterComponent implements OnInit {
     this.loading = true;
     this.authservice.register(this.registerForm.value).subscribe({
       next: (response) => {
-        console.log('Registro exitoso', response);
+        this.logger.log('RegisterComponent','Registro exitoso', response);
         this.loading = false;
+        this.router.navigate(['/login'])
       },
       error: (err) => {
-        console.error('Error en el registro', err);
+        this.logger.error('RegisterComponent','Error en el registro', err);
         this.loading = false;
         this.error = 'Error al registrar, intenta nuevamente';
       }

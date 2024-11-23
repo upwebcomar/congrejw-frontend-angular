@@ -1,0 +1,10 @@
+<div class="admin-access-container">
+    <h2>Admin Access</h2>
+    <button (click)="accessAdmin()" [disabled]="loading">
+      {{ loading ? 'Loading...' : 'Access Admin' }}
+    </button>
+    <p *ngIf="message" [class.success]="message.includes('granted')" [class.error]="message.includes('denied')">
+      {{ message }}
+    </p>
+  </div>
+  
