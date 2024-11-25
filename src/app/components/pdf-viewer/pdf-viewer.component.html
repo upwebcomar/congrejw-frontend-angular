@@ -1,0 +1,15 @@
+<div style="text-align: center;">
+    <pdf-viewer 
+      [src]="pdfSrc"
+      [render-text]="true"
+      [zoom]="zoom"
+      [original-size]="false"
+      [show-all]="true"
+      style="display: block;"
+    ></pdf-viewer>
+  </div>
+  <div>
+    <button (click)="zoomIn()">Zoom +</button>
+    <button (click)="zoomOut()">Zoom -</button>
+  </div>
+  

@@ -1,2 +1,14 @@
-<p>Tablero de anuncios</p>
+<div style="text-align: center; margin: 20px;">
+    <h2>Visualizador de PDF</h2>
+    <p>Usa <strong>Ctrl + Scroll</strong> para hacer zoom</p>
+  
+    <!-- Componente PDF Viewer -->
+    <pdf-viewer
+      [src]="pdfSrc"
+      [zoom]="zoom"
+      style="display: block; width: 100%; height: 800px;">
+    </pdf-viewer>
+  
+    <p>Nivel de zoom: {{ zoom | number: '1.1-1' }}</p>
+  </div>
   
