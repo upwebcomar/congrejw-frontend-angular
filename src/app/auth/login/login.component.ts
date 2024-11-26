@@ -69,6 +69,7 @@ export class LoginComponent {
         },
         error: error => {
           this.error = 'Error de inicio de sesión '+ error;
+          this.logger.log(this.context,this.error)
           this.loading = false;
           this.cdr.detectChanges()
         }

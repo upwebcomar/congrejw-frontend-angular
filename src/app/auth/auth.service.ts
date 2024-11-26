@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { RegisterDto } from './dto/register.dto';
 import { environment } from '../../environments/environment';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
@@ -26,4 +27,17 @@ export class AuthService {
   register(credentials:RegisterDto) {
     return this.http.post(`${this.apiUrl}/auth/register`, credentials)
   }
+  isTokenValid(): boolean {
+    const token = this.getToken();
+    if (!token) return false;
+  
+    try {
+      const decoded: any = jwtDecode(token);
+      const now = Math.floor(Date.now() / 1000);
+      return decoded.exp && decoded.exp > now;
+    } catch {
+      return false;
+    }
+  }
+  
 }
