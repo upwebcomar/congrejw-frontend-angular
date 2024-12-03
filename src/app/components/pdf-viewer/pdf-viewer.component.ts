@@ -13,6 +13,8 @@ import { GlobalWorkerOptions } from 'pdfjs-dist';
 export class PdfViewerComponent {
   @Input() pdfSrc!:string // Ruta del PDF
   @Input() zoom = 1; // Nivel inicial de zoom
+  @Input() page = 1; // Nivel inicial de zoom
+  @Input() showAll = false; // Nivel inicial de zoom
 
   constructor(private el: ElementRef, private renderer: Renderer2) {
     // Configuración del worker para pdf.js
