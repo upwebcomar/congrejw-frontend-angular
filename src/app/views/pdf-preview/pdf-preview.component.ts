@@ -13,6 +13,8 @@ import { PdfViewerComponent } from '../../components/pdf-viewer/pdf-viewer.compo
 export class PdfPreviewComponent implements OnInit {
     pdfSrc:string = ''
     zoom!:number
+    page!:number
+    showAll!:boolean
   constructor(
     private route:ActivatedRoute
   ) {}
@@ -21,6 +23,8 @@ export class PdfPreviewComponent implements OnInit {
     // Suscribirse a los cambios del parámetro
     this.route.queryParams.subscribe(params => {
         this.pdfSrc = params['pdfsrc'] || ''; // Obtener el parámetro "pdfSrc"
+        this.page = Number(params['page']) || 1; // Asegurar que "page" sea un número
+        this.showAll = params['showAll'] === 'true'; // Convertir el string "true"/"false" a booleano
       });
     }
   

@@ -1,5 +1,47 @@
+<div class="container">
+  <!-- Mensaje de carga -->
+  <div *ngIf="cargando" class="text-center my-4">
+    <p>Cargando anuncios...</p>
+  </div>
 
-<a [routerLink]="['/pdf-preview']" [queryParams]="{ pdfsrc: '/assets/pdfs/Protejase_contra_el_Dengue.pdf' }">
-    Ver PDF
-  </a>
-  
+  <!-- Mensaje de error -->
+  <div *ngIf="error" class="alert alert-danger my-4">
+    {{ error }}
+  </div>
+
+  <!-- Listado de anuncios -->
+  <div *ngIf="!cargando && !error">
+    <div class="d-grid gap-2" *ngFor="let anuncio of anuncios; let i = index">
+      <!-- Botón de colapso -->
+      <a
+        class="btn btn-primary"
+        data-bs-toggle="collapse"
+        [attr.href]="'#collapse' + i"
+        role="button"
+        aria-expanded="false"
+        [attr.aria-controls]="'collapse' + i"
+      >
+        {{ anuncio.titulo }}
+      </a>
+
+      <!-- Contenido colapsable -->
+      <div class="collapse" [id]="'collapse' + i">
+        <div class="card card-body">
+          <p>{{ anuncio.descripcion }}</p>
+          <a
+            class="btn btn-primary"
+            type="button"
+            [routerLink]="['/pdf-preview']"
+            [queryParams]="{
+              pdfsrc: anuncio.pathfile,
+              page: anuncio.page,
+              showAll: anuncio.show_all
+            }"
+          >
+            Ver Pdf
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

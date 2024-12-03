@@ -5,7 +5,11 @@
     <p>Usa <strong>Ctrl + Scroll</strong> para hacer zoom</p>
   
     <!-- Componente PDF Viewer -->
-    <app-pdf-viewer [pdfSrc]="pdfSrc"></app-pdf-viewer>
+    <app-pdf-viewer 
+        [pdfSrc]="pdfSrc" 
+        [page]="page"
+        [showAll]="showAll"
+        ></app-pdf-viewer>
   
     <p>Nivel de zoom: {{ zoom | number: '1.1-1' }}</p>
   </div>
