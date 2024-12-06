@@ -11,6 +11,7 @@ import { UnauthorizedComponent } from './views/unauthorized/unauthorized.compone
 import { NotFoundComponent } from './views/not-found/not-found.component';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { PdfPreviewComponent } from './views/pdf-preview/pdf-preview.component';
+import { CrearAnuncioComponent } from './views/tableroanuncios/forms/crear-anuncio.component';
 
 
 export const routes: Routes = [
@@ -28,6 +29,12 @@ export const routes: Routes = [
     {
         path: "tablero-anuncios",
         component: TableroanunciosComponent,
+        canActivate: [AuthGuard,RoleGuard],
+        data: { roles: ['user'] },
+    },
+    {
+        path: "tablero-anuncios/crear-anuncio",
+        component: CrearAnuncioComponent,
         canActivate: [AuthGuard,RoleGuard],
         data: { roles: ['user'] },
     },

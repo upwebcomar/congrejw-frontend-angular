@@ -4,6 +4,7 @@ import { environment } from '../../../environments/environment';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { LoggerService } from '../../services/logger.service';
+import { RoleService } from '../../auth/roles/role.service';
 
 interface TableroAnuncios {
   id: number;
@@ -25,12 +26,20 @@ export class TableroanunciosComponent implements OnInit {
   anuncios: TableroAnuncios[] = [];
   cargando: boolean = true;
   error: string | null = null;
+  roles!:string[] 
   private apiUrl = `${environment.apiUrl}/tablero-anuncios`; // Cambia esto por tu endpoint
+  context:string = 'TableroanunciosComponent'
 
-  constructor(private http: HttpClient, private logger:LoggerService) {}
+  constructor(
+    private http: HttpClient,
+    private logger:LoggerService,
+    private rolesService:RoleService
+  ) {}
 
   ngOnInit(): void {
     this.obtenerAnuncios();
+    this.roles = this.rolesService.getRoles() //Cargo los roles del usuario
+
   }
 
   obtenerAnuncios(): void {
@@ -39,6 +48,7 @@ export class TableroanunciosComponent implements OnInit {
         this.anuncios = data;
         this.anuncios.forEach(anuncio=>{
           anuncio.pathfile = `${environment.apiUrl}/files/${anuncio.pathfile}`;
+          this.logger.log(this.context,'anuncio:',anuncio)
         })
         this.cargando = false;
         this.logger.log('TableroanunciosComponent','Carga de anuncios desde el servidor',this.anuncios);

@@ -1,45 +1,70 @@
-<div class="container">
+<div class="container my-5">
   <!-- Mensaje de carga -->
   <div *ngIf="cargando" class="text-center my-4">
-    <p>Cargando anuncios...</p>
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-3">Cargando anuncios...</p>
   </div>
 
   <!-- Mensaje de error -->
-  <div *ngIf="error" class="alert alert-danger my-4">
+  <div *ngIf="error" class="alert alert-danger text-center my-4">
     {{ error }}
   </div>
 
   <!-- Listado de anuncios -->
   <div *ngIf="!cargando && !error">
-    <div class="d-grid gap-2" *ngFor="let anuncio of anuncios; let i = index">
-      <!-- Botón de colapso -->
+    <!-- Agregar anuncio -->
+    <div class="d-flex justify-content-end mb-4">
       <a
-        class="btn btn-primary"
-        data-bs-toggle="collapse"
-        [attr.href]="'#collapse' + i"
-        role="button"
-        aria-expanded="false"
-        [attr.aria-controls]="'collapse' + i"
+        class="btn btn-success btn-lg d-flex align-items-center justify-content-center"
+        routerLink="/tablero-anuncios/crear-anuncio"
+        style="width: 50px; height: 50px; border-radius: 50%;"
+        title="Crear Anuncio"
       >
-        {{ anuncio.titulo }}
+        <span class="fs-4">+</span>
       </a>
+    </div>
 
-      <!-- Contenido colapsable -->
-      <div class="collapse" [id]="'collapse' + i">
-        <div class="card card-body">
-          <p>{{ anuncio.descripcion }}</p>
-          <a
-            class="btn btn-primary"
-            type="button"
-            [routerLink]="['/pdf-preview']"
-            [queryParams]="{
-              pdfsrc: anuncio.pathfile,
-              page: anuncio.page,
-              showAll: anuncio.show_all
-            }"
-          >
-            Ver Pdf
-          </a>
+    <!-- Listado de anuncios -->
+    <div class="row g-3">
+      <div class="col-md-6" *ngFor="let anuncio of anuncios; let i = index">
+        <div class="card shadow-sm h-100">
+          <!-- Título del anuncio -->
+          <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">{{ anuncio.titulo }}</h5>
+            <button
+              class="btn btn-sm btn-light"
+              data-bs-toggle="collapse"
+              [attr.href]="'#collapse' + i"
+              role="button"
+              aria-expanded="false"
+              [attr.aria-controls]="'collapse' + i"
+            >
+              Ver Más
+            </button>
+          </div>
+
+          <!-- Contenido colapsable -->
+          <div class="collapse" [id]="'collapse' + i">
+            <div class="card-body">
+              <p>{{ anuncio.descripcion }}</p>
+              <div class="d-grid">
+                <a
+                  class="btn btn-outline-primary"
+                  type="button"
+                  [routerLink]="['/pdf-preview']"
+                  [queryParams]="{
+                    pdfsrc: anuncio.pathfile,
+                    page: anuncio.page,
+                    showAll: anuncio.show_all
+                  }"
+                >
+                  Ver PDF
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
