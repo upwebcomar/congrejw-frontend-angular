@@ -5,15 +5,9 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { LoggerService } from '../../services/logger.service';
 import { RoleService } from '../../auth/roles/role.service';
+import { TableroAnuncios } from './tableroanuncios.interface';
 
-interface TableroAnuncios {
-  id: number;
-  titulo: string;
-  descripcion: string;
-  pathfile: string;
-  page: string;
-  show_all: boolean;
-}
+
 
 @Component({
   selector: 'app-anuncios',
@@ -46,9 +40,9 @@ export class TableroanunciosComponent implements OnInit {
     this.http.get<TableroAnuncios[]>(this.apiUrl).subscribe({
       next: (data) => {
         this.anuncios = data;
+        //Adecuacion url para el boton de abrir PDF en la ruta que accese a los archivos en cada anuncio
         this.anuncios.forEach(anuncio=>{
           anuncio.pathfile = `${environment.apiUrl}/files/${anuncio.pathfile}`;
-          this.logger.log(this.context,'anuncio:',anuncio)
         })
         this.cargando = false;
         this.logger.log('TableroanunciosComponent','Carga de anuncios desde el servidor',this.anuncios);
@@ -61,4 +55,20 @@ export class TableroanunciosComponent implements OnInit {
       },
     });
   }
+  borrarAnuncio(id: number): void {
+    if (confirm('¿Estás seguro de que deseas eliminar este anuncio?')) {
+      this.http.delete(`${this.apiUrl}/${id}`).subscribe({
+        next: () => {
+          this.logger.log(this.context, `Anuncio con ID ${id} eliminado.`);
+          this.anuncios = this.anuncios.filter((anuncio) => anuncio.id !== id);
+          alert('El anuncio ha sido eliminado correctamente.');
+        },
+        error: (err) => {
+          this.logger.error(this.context, 'Error al eliminar el anuncio:', err);
+          alert('Hubo un problema al eliminar el anuncio.');
+        },
+      });
+    }
+  }
+  
 }

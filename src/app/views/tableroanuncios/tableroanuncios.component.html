@@ -49,10 +49,9 @@
           <div class="collapse" [id]="'collapse' + i">
             <div class="card-body">
               <p>{{ anuncio.descripcion }}</p>
-              <div class="d-grid">
+              <div class="d-grid mb-3">
                 <a
                   class="btn btn-outline-primary"
-                  type="button"
                   [routerLink]="['/pdf-preview']"
                   [queryParams]="{
                     pdfsrc: anuncio.pathfile,
@@ -62,6 +61,27 @@
                 >
                   Ver PDF
                 </a>
+              </div>
+
+              <!-- Botones de acción (verificación de roles) -->
+              <div
+                *ngIf="roles.includes('admin') || roles.includes('editor')"
+                class="d-flex justify-content-between"
+              >
+                <button
+                  class="btn btn-warning btn-sm"
+                  [routerLink]="['/tablero-anuncios/editar-anuncio', anuncio.id]"
+                  title="Editar Anuncio"
+                >
+                  Editar
+                </button>
+                <button
+                  class="btn btn-danger btn-sm"
+                  (click)="borrarAnuncio(anuncio.id)"
+                  title="Borrar Anuncio"
+                >
+                  Borrar
+                </button>
               </div>
             </div>
           </div>

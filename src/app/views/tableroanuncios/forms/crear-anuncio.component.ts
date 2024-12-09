@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { LoggerService } from '../../../services/logger.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-crear-anuncio',
@@ -54,7 +55,7 @@ export class CrearAnuncioComponent {
           formData.forEach((value,key)=>{
             this.logger.log(this.context,'formData',key,value);
           })
-      this.http.post('http://localhost:3000/tablero-anuncios', formData).subscribe({
+      this.http.post(environment.apiUrl+'/tablero-anuncios', formData).subscribe({
         next: (response) => {
           this.logger.log(this.context,'Anuncio creado:', response);
           this.router.navigate(['tablero-anuncios'])

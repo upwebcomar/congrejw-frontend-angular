@@ -1,15 +1,19 @@
-
-
-<div class="container text-center">
-
-    <p>Usa <strong>Ctrl + Scroll</strong> para hacer zoom</p>
+<div class="container text-center w-100 mx-auto">
+    <p>Usa <strong>Ctrl + Scroll</strong> o los botones para hacer zoom</p>
+  
+    <!-- Botones de zoom -->
+    <div class="d-flex justify-content-center gap-2 my-2">
+      <button class="btn btn-primary" (click)="decreaseZoom()">-</button>
+      <span class="align-self-center">Zoom: {{ zoom | number: '1.1-1' }}</span>
+      <button class="btn btn-primary" (click)="increaseZoom()">+</button>
+    </div>
   
     <!-- Componente PDF Viewer -->
     <app-pdf-viewer 
         [pdfSrc]="pdfSrc" 
         [page]="page"
-        [showAll]="showAll"
-        ></app-pdf-viewer>
-  
-    <p>Nivel de zoom: {{ zoom | number: '1.1-1' }}</p>
+        [zoom]="zoom"
+        [showAll]="showAll">
+    </app-pdf-viewer>
   </div>
+  
