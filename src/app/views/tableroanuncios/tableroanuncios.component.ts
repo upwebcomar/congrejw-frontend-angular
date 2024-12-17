@@ -6,13 +6,16 @@ import { RouterModule } from '@angular/router';
 import { LoggerService } from '../../services/logger.service';
 import { RoleService } from '../../auth/roles/role.service';
 import { TableroAnuncios } from './tableroanuncios.interface';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+
 
 
 
 @Component({
   selector: 'app-anuncios',
   standalone:true,
-  imports:[CommonModule,RouterModule],
+  imports:[CommonModule,RouterModule,DragDropModule],
   templateUrl: './tableroanuncios.component.html',
   styles:'',
 })
@@ -70,5 +73,16 @@ export class TableroanunciosComponent implements OnInit {
       });
     }
   }
+  reordenarAnuncios(event: CdkDragDrop<TableroAnuncios[]>): void {
+    moveItemInArray(this.anuncios, event.previousIndex, event.currentIndex);
+    this.logger.log(this.context, 'Anuncios reordenados:', this.anuncios);
+  
+    // Opcional: Enviar el nuevo orden al servidor para persistir los cambios
+    // this.http.post(`${this.apiUrl}/update-order`, { anuncios: this.anuncios }).subscribe({
+    //   next: () => this.logger.log(this.context, 'Orden actualizado en el servidor.'),
+    //   error: (err) => this.logger.error(this.context, 'Error al actualizar el orden:', err),
+    // });
+  }
+  
   
 }

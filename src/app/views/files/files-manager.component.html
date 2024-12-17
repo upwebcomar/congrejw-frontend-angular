@@ -1,0 +1,39 @@
+<div class="container mt-5">
+  <h2>File Manager</h2>
+
+  <!-- Upload Section -->
+  <div class="mb-4">
+    <h4>Upload File</h4>
+    <div class="input-group">
+      <input type="file" class="form-control" (change)="onFileSelected($event)" />
+      <button class="btn btn-primary" (click)="uploadFile()">Upload</button>
+    </div>
+  </div>
+
+  <!-- Files List -->
+  <div *ngIf="files.length > 0">
+    <h4>Available Files</h4>
+    <ul class="list-group">
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center"
+        *ngFor="let file of files"
+      >
+        {{ file }}
+        <div>
+          <button class="btn btn-secondary btn-sm m-1" (click)="downloadFile(file)">
+            Download
+          </button>
+          <button class="btn btn-danger btn-sm m-1" (click)="removeFile(file)">
+            Delete
+          </button>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="files.length === 0">
+    <p>No files available.</p>
+  </div>
+
+<!-- Debugging -->
+<!--  <pre>{{ files | json }}</pre> -->
+</div>

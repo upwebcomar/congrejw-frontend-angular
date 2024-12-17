@@ -13,6 +13,7 @@ import { AuthGuard } from './auth/guards/auth.guard';
 import { PdfPreviewComponent } from './views/pdf-preview/pdf-preview.component';
 import { CrearAnuncioComponent } from './views/tableroanuncios/forms/crear-anuncio.component';
 import { EditarAnuncioComponent } from './views/tableroanuncios/forms/editar-anuncio.component';
+import { FilesManagerComponent } from './views/files/files-manager.component';
 
 
 export const routes: Routes = [
@@ -50,7 +51,13 @@ export const routes: Routes = [
         component: PdfPreviewComponent,
         canActivate: [AuthGuard,RoleGuard],
         data: { roles: ['user'] },
-    
+        
+    },
+    {
+        path: "files-manager",
+        component: FilesManagerComponent,
+        canActivate: [AuthGuard,RoleGuard],
+        data: { roles: ['admin','user'] },
     },
 
 

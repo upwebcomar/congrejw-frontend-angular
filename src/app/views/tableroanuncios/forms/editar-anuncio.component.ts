@@ -6,6 +6,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LoggerService } from '../../../services/logger.service';
 import { TableroAnuncios } from '../tableroanuncios.interface';
 import { environment } from '../../../../environments/environment';
+import { FileService } from '../../files/files.service';
+
 
 type TableroAnunciosForm = {
   [K in keyof TableroAnuncios]: FormControl<TableroAnuncios[K]>;
@@ -28,7 +30,8 @@ export class EditarAnuncioComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private route: ActivatedRoute,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private fileService:FileService
   ) {
     // Inicializa el formulario con valores predeterminados
     this.anuncioForm = this.fb.group({
@@ -52,7 +55,7 @@ export class EditarAnuncioComponent implements OnInit {
 
   // Carga los datos del anuncio en el formulario
   cargarDatosAnuncio(id: string) {
-    this.http.get(`http://localhost:3000/tablero-anuncios/${id}`).subscribe({
+    this.http.get(environment.apiUrl+'/tablero-anuncios/'+id).subscribe({
       next: (data: Partial<TableroAnuncios>) => {
         this.anuncioForm.patchValue(data);
         this.logger.log(this.context, 'Datos cargados:', data);
@@ -82,7 +85,9 @@ export class EditarAnuncioComponent implements OnInit {
     const formData = new FormData();
     formData.append('titulo', this.anuncioForm.get('titulo')?.value);
     formData.append('descripcion', this.anuncioForm.get('descripcion')?.value);
-    formData.append('pathfile', this.anuncioForm.get('pathfile')?.value);
+    let pathfile = this.anuncioForm.get('pathfile')?.value
+    pathfile = this.fileService.sanitizeFileName(pathfile)
+    formData.append('pathfile',pathfile );
     formData.append('page', this.anuncioForm.get('page')?.value);
     if(this.anuncioForm.get('show_all')?.value == true){
       formData.append('show_all', this.anuncioForm.get('show_all')?.value);

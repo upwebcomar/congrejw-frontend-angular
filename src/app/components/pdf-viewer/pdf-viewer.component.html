@@ -1,8 +1,19 @@
-<!-- Componente PDF Viewer -->
-<pdf-viewer
-  [src]="pdfSrc"
-  [zoom]="zoom"
-  [page]="page"
-  [show-all]="showAll"
-  class="d-block w-100 custom-height">
-</pdf-viewer>
+<div class="pdf-viewer-container">
+  <!-- Spinner mientras se carga el PDF -->
+  <div *ngIf="isLoading" class="spinner-container">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <!-- Vista PDF -->
+  <pdf-viewer
+    [src]="pdfSrc"
+    [zoom]="zoom"
+    [page]="page"
+    [show-all]="showAll"
+    class="d-block w-100 custom-height"
+    (after-load-complete)="onPdfLoaded()"
+    (error)="onPdfError($event)">
+  </pdf-viewer>
+</div>

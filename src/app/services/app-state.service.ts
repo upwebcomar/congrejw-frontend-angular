@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LoggerService } from './logger.service';
 import { RoleService } from '../auth/roles/role.service';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,17 +18,19 @@ export class AppStateService {
 
   constructor(
       private logger:LoggerService,
-      private roleService:RoleService
+      private roleService:RoleService,
+      private authService:AuthService
       ){
         this.logger.log(this.context,'AppStateService funcionando');
         const token = this.roleService.getToken()
-        if(token){
+        if(token && this.authService.isTokenValid()){
           const payload = this.roleService.loadDataFromToken(token)
           if (payload != undefined){
           this.setUserState(payload.username)
           this.setLoggedState(true)
+          this.logger.log(this.context,'Token valido')
           }
-        }
+        }else{this.logger.log(this.context,'Token no valido')}
   }
 
 
