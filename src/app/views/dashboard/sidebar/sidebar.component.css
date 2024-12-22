@@ -1,0 +1,37 @@
+/* Contenedor principal */
+.d-flex.flex-column {
+    height: 100vh; /* Altura completa de la ventana */
+  }
+  
+  /* Botón Hamburger */
+  button {
+    margin: 10px; /* Espaciado alrededor del botón */
+  }
+  
+  /* Sidebar */
+  #sidebar {
+    width: 250px;
+    transition: width 0.3s ease;
+    overflow: hidden; /* Evita que el contenido exceda */
+    z-index: 100;
+  }
+  
+  #sidebar.sidebar-collapsed {
+    width: 70px;
+  }
+  
+  /* Visibilidad del texto */
+  #sidebar .sidebar-link {
+    opacity: 1; /* Totalmente visible */
+    transition: opacity 0.3s ease, width 0.3s ease;
+  }
+  
+  #sidebar.sidebar-collapsed .sidebar-link {
+    opacity: 0; /* Oculta las letras */
+  }
+  
+  /* Íconos siempre visibles */
+  #sidebar .bi {
+    margin-right: 10px;
+  }
+  

@@ -5,5 +5,6 @@ export interface TableroAnuncios {
     pathfile: string;
     page: string;
     show_all: boolean;
+    position: number;
   }
   

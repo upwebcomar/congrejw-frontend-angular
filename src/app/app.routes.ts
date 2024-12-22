@@ -14,6 +14,8 @@ import { PdfPreviewComponent } from './views/pdf-preview/pdf-preview.component';
 import { CrearAnuncioComponent } from './views/tableroanuncios/forms/crear-anuncio.component';
 import { EditarAnuncioComponent } from './views/tableroanuncios/forms/editar-anuncio.component';
 import { FilesManagerComponent } from './views/files/files-manager.component';
+import { gruposServiciodelcampoComponent } from './views/grupos-serviciodelcampo/grupos-serviciodelcampo.component';
+import { DashboardComponent } from './views/dashboard/dashboard.component';
 
 
 export const routes: Routes = [
@@ -52,6 +54,19 @@ export const routes: Routes = [
         canActivate: [AuthGuard,RoleGuard],
         data: { roles: ['user'] },
         
+    },
+    {
+        path: "grupos-servicio-campo",
+        component: gruposServiciodelcampoComponent,
+        canActivate: [AuthGuard,RoleGuard],
+        data: { roles: ['user'] },
+        
+    },
+    {
+        path: "dashboard",
+        component: DashboardComponent,
+        canActivate: [AuthGuard,RoleGuard],
+        data: { roles: ['admin','user'] },
     },
     {
         path: "files-manager",

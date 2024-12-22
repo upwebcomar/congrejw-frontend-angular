@@ -55,10 +55,10 @@ export class PdfViewerComponent {
     console.error('Error cargando el PDF:', error);
 
     // Mostrar alerta al usuario
-    alert('Hubo un problema al cargar el PDF. Serás redirigido al tablero de anuncios.');
+    alert('Hubo un problema al cargar el PDF.');
 
     // Redirigir al tablero de anuncios
-    this.router.navigate(['/tablero-anuncios']);
+    //this.router.navigate(['/']);
   }
 
   // Método para ajustar el zoom con el scroll (evento 'wheel')
