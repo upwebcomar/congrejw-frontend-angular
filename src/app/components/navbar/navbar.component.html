@@ -29,7 +29,8 @@
                 <li><a class="dropdown-item" routerLink="/home">Telefonica</a></li>
                 <li><a class="dropdown-item" routerLink="/home">Mi lectura de la Biblia</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" routerLink="/dashboard">Configuración</a></li>
+                <li><a class="dropdown-item" routerLink="/config">Configuración</a></li>
+                <li *ngIf="isTieneRolPermitido"><a class="dropdown-item" routerLink="/dashboard">Administración</a></li>
               </ul>
             </li>
           </ng-container>

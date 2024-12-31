@@ -30,6 +30,7 @@ export class TableroanunciosComponent implements OnInit {
     agregar: ['admin', 'editor'], // Roles permitidos para agregar un anuncio
     editar: ['admin', 'editor'],  // Roles permitidos para editar un anuncio
     borrar: ['admin'],            // Roles permitidos para borrar un anuncio
+    admin: ['admin'],            // Roles permitidos para borrar un anuncio
   };
 
   constructor(
@@ -48,7 +49,12 @@ export class TableroanunciosComponent implements OnInit {
       next: (data) => {
         this.anuncios = data.sort((a, b) => a.position - b.position); // Ordenar por posición
         this.anuncios.forEach((anuncio) => {
-          anuncio.pathfile = `${environment.apiUrl}/files/${anuncio.pathfile}`;
+          if(anuncio.pathfile){
+            anuncio.pathfile = `${environment.apiUrl}/files/${anuncio.pathfile}`;
+          }else {
+            anuncio.pathfile = ""
+          }
+          
         });
         this.cargando = false;
         this.logger.log(this.context, 'Carga de anuncios desde el servidor', this.anuncios);

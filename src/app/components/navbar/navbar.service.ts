@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +16,12 @@ export class NavbarService {
   }
   updateLoginHref(path: string) {
     this.loginHrefSource.next(path);
+  }
+  private actualizaNavbar = new Subject<void>();
+  actualizarNavbar$ = this.actualizaNavbar.asObservable();
+
+  actualizarNavbar() {
+    this.actualizaNavbar.next();
   }
 
 }

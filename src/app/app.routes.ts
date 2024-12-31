@@ -3,7 +3,6 @@ import { HomeComponent } from './views/home/home.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
-import { MicuentaComponent } from './micuenta/micuenta.component';
 import { TableroanunciosComponent } from './views/tableroanuncios/tableroanuncios.component';
 import { AdminComponent } from './test endpoints/admin/admin.component';
 import { RoleGuard } from './auth/guards/role.guard';
@@ -16,6 +15,8 @@ import { EditarAnuncioComponent } from './views/tableroanuncios/forms/editar-anu
 import { FilesManagerComponent } from './views/files/files-manager.component';
 import { gruposServiciodelcampoComponent } from './views/grupos-serviciodelcampo/grupos-serviciodelcampo.component';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
+import { MicuentaComponent } from './views/micuenta/micuenta.component';
+import { ConfiguracionComponent } from './views/configuracion/configuracion.component';
 
 
 export const routes: Routes = [
@@ -28,7 +29,7 @@ export const routes: Routes = [
         path: "micuenta",
         component: MicuentaComponent,
         canActivate: [AuthGuard, RoleGuard],
-        data: { roles: ['admin','user'] },
+        data: { roles: ['user'] },
     },
     {
         path: "tablero-anuncios",
@@ -63,10 +64,16 @@ export const routes: Routes = [
         
     },
     {
+        path: "config",
+        component: ConfiguracionComponent,
+        canActivate: [AuthGuard,RoleGuard],
+        data: { roles: ['admin','user'] },
+    },
+    {
         path: "dashboard",
         component: DashboardComponent,
         canActivate: [AuthGuard,RoleGuard],
-        data: { roles: ['admin','user'] },
+        data: { roles: ['admin'] },
     },
     {
         path: "files-manager",

@@ -42,7 +42,10 @@ export class AppStateService {
     }
   }
 
-  setLoggedState(data: boolean): void {
+  setLoggedState(data: boolean, context?:string): void {
+    if(context){
+    this.logger.log(context, `setLoggedState(): ${data}`);
+    }
     this.logged.next(data);
   }
 }

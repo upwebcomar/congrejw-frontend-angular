@@ -55,7 +55,7 @@ export class LoginComponent {
           localStorage.setItem('access_token', response.access_token);
 
           this.appstate.setUserState(username,this.context)
-          this.appstate.setLoggedState(true)
+          this.appstate.setLoggedState(true,this.context)
           this.navbarService.updateLoginHref('micuenta')
           this.cdr.detectChanges()
 
@@ -63,7 +63,7 @@ export class LoginComponent {
           this.roleService.loadRolesFromToken(response.access_token);
 
           // Opcional: Verifica los roles del usuario
-          this.logger.log('LoginComponent','Roles cargados:', this.roleService.getRoles());
+          this.logger.log(this.context,'Roles cargados:', this.roleService.getRoles());
           
           this.router.navigate(['/home']); // Redirigir a la página principal o a donde quieras
         },

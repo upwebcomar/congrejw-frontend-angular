@@ -74,6 +74,13 @@ export class EditarAnuncioComponent implements OnInit {
       this.logger.log(this.context, 'Archivo seleccionado:', this.pdfFile);
     }
   }
+  clearPathfile() {
+    const confirmDelete = confirm('¿Estás seguro de que deseas eliminar el contenido?');
+    if (confirmDelete) {
+      this.anuncioForm.get('pathfile')?.setValue('');
+    }
+  }
+  
 
   // Envía los datos para modificar el anuncio
   onSubmit() {

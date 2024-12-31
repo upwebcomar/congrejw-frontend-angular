@@ -72,4 +72,5 @@ export class RoleService {
     localStorage.removeItem('token'); // Elimina el token del almacenamiento
     this.roles = []; // Limpia los roles
   }
+
 }

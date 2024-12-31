@@ -48,24 +48,21 @@ export class CrearAnuncioComponent {
       formData.append('show_all', this.anuncioForm.get('show_all')?.value);
       formData.append('pathfile', this.pdfFile?.name as string);
 
-      
-
     if (this.pdfFile) {
           formData.append('file', this.pdfFile);
           formData.forEach((value,key)=>{
             this.logger.log(this.context,'formData',key,value);
-          })
-      this.http.post(environment.apiUrl+'/tablero-anuncios', formData).subscribe({
-        next: (response) => {
-          this.logger.log(this.context,'Anuncio creado:', response);
-          this.router.navigate(['tablero-anuncios'])
-        },
-        error: (error) => {
-          alert('Error al crear el anuncio:' + error);
-        },
-      });
-    } else {
-      alert('Por favor selecciona un archivo PDF.');
-    }
+          })}
+
+    this.http.post(environment.apiUrl+'/tablero-anuncios', formData).subscribe({
+      next: (response) => {
+        this.logger.log(this.context,'Anuncio creado:', response);
+        this.router.navigate(['tablero-anuncios'])
+      },
+      error: (error) => {
+        alert('Error al crear el anuncio:' + error);
+      },
+    });
+    
   }
 }
