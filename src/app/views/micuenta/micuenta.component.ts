@@ -1,10 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppStateService } from '../../services/app-state.service';
 import { UserProfile } from './user-profile.interface';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { Observable } from 'rxjs';
+import { JwtPayload } from '../../auth/jwt-payload.interface';
 
 @Component({
   selector: 'app-micuenta',
@@ -34,22 +38,25 @@ import { UserProfile } from './user-profile.interface';
     `,
   ],
 })
-export class MicuentaComponent {
+export class MicuentaComponent implements OnInit {
   profileForm: FormGroup;
   isEditing = false;
-
+  jwtPayload: any
+  user:any
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private appState: AppStateService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private http: HttpClient,
+     
   ) {
-   const initialProfile: UserProfile = {
-      name: 'Pablo González',
-      email: 'pablo.gonzalez@example.com',
-      phone: '+54 9 11 1234-5678',
-      address: 'Mendoza',
+    const initialProfile: UserProfile = {
+      name: '',
+      email: '',
+      phone: '',
+      address: '',
     };
 
     this.profileForm = this.fb.group({
@@ -59,17 +66,52 @@ export class MicuentaComponent {
       address: [initialProfile.address, []],
     });
   }
+  ngOnInit(): void {
+    this.getUser()
+    
+  }
   toggleEdit() {
     this.isEditing = !this.isEditing;
   }
 
+  getUser(){
+    const token = this.authService.getToken()
+
+    if (token) { 
+      this.jwtPayload = this.authService.loadDataFromToken(token)
+      console.log(this.jwtPayload);
+      
+    }
+
+    this.http.get<any>(`${environment.apiUrl}/users/${this.jwtPayload?.userId}`).subscribe({
+      next: (data) => {
+      
+          console.log('data',data);
+          this.profileForm.patchValue(data.profile); // Se espera que `data` tenga las mismas claves que el formulario
+
+      },
+      error: (error) => {
+        console.error('Error al obtener el Usuario:', error);
+        alert('Hubo un problema al cargar los datos del usuario. Por favor, intenta de nuevo más tarde.');
+      },
+    });
+  }
+
+
   saveChanges() {
     if (this.profileForm.valid) {
-      // Aquí puedes realizar una lógica adicional para guardar en el backend
-      console.log('Datos actualizados:', this.profileForm.value);
+      this.http.put<UserProfile>(`${environment.apiUrl}/profiles/${this.jwtPayload?.userId}`,this.profileForm.value).subscribe({
+        next: (data) => {
+          console.log(data);
+          
+        },
+        error: (error) => {
+          console.error('Error al obtener el perfil:', error);
+          alert('Hubo un problema al cargar los datos del perfil. Por favor, intenta de nuevo más tarde.');
+        },
+      });
+
       this.isEditing = false;
-      
-      alert('Perfil actualizado con éxito.');
     } else {
       alert('Por favor corrige los errores antes de guardar.');
     }
