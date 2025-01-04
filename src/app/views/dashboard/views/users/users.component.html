@@ -1,0 +1,34 @@
+<div class="container mt-4">
+  <h2>Gestión de Permisos</h2>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Usuario</th>
+        <th>Roles</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.username }}</td>
+        <td>
+          <div *ngFor="let role of roles" class="form-check form-check-inline">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              [id]="user.id + '-' + role"
+              [checked]="user.roles.includes(role)"
+              (change)="toggleRole(user, role)"
+            />
+            <label class="form-check-label" [for]="user.id + '-' + role">
+              {{ role }}
+            </label>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- Botón de Actualizar -->
+  <div class="text-end mt-3">
+    <button class="btn btn-primary" (click)="saveChanges()">Actualizar Roles</button>
+  </div>
+</div>
