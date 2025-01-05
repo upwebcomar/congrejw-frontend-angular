@@ -15,6 +15,9 @@ COPY . .
 # Construir la aplicación Angular en modo producción
 RUN npm run build -- --configuration production
 
+# Generar el Service Worker con Workbox
+RUN npx workbox generateSW workbox-config.js
+
 # Etapa 2: Servir la aplicación con un servidor web
 FROM nginx:alpine
 
@@ -29,4 +32,3 @@ EXPOSE 80
 
 # Comando para iniciar Nginx
 CMD ["nginx", "-g", "daemon off;"]
-
