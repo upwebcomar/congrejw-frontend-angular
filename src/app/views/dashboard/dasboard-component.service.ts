@@ -1,11 +1,15 @@
 import { Injectable, Type } from '@angular/core';
 import { UsersComponent } from './views/users/users.component';
+import { SendNotificationComponent } from './views/notifications/notifications.component';
+
 
 
 @Injectable({ providedIn: 'root' })
 export class DashboardComponentService {
+  
   private widgets: { [key: string]: Type<any> } = {
     users: UsersComponent,
+    notifications: SendNotificationComponent
 
   };
 

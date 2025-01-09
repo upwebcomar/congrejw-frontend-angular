@@ -10,37 +10,56 @@
     class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary"
     [class.sidebar-collapsed]="isCollapsed"
   >
-    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+    <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
       <i class="bi bi-gear me-2" style="font-size: 40px;"></i>
       <span class="fs-4 sidebar-link">Administración</span>
     </a>
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
       <li class="nav-item">
-        <a href="#" class="nav-link active" aria-current="page">
+        <a routerLink="/" class="nav-link link-body-emphasis" aria-current="page">
           <i class="bi bi-house-door me-2"></i>
           <span class="sidebar-link">Home</span>
         </a>
       </li>
       <li class="nav-item">
-        <a href="#" class="nav-link" aria-current="page">
+        <a class="nav-link link-body-emphasis" 
+          (click) = "sidebarItem('users')"
+          [class.active]="isActiveUsuarios"  
+          aria-current="page"
+          >
           <i class="bi bi-people"></i>
           <span class="sidebar-link">Usuarios</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link link-body-emphasis" 
+          (click) = "sidebarItem('notifications')"
+          [class.active]="isActiveNotifications"  
+          aria-current="page"
+          >
+          <i class="bi bi-bell"></i>
+          <span class="sidebar-link">Notifications</span>
+        </a>
+      </li>
       <li>
-        <a href="#" class="nav-link link-body-emphasis">
+        <a class="nav-link link-body-emphasis" [class.active]="isActiveDashboard"
+          (click) = "sidebarItem('dashboard')"
+        >
           <i class="bi bi-speedometer2 me-2"></i>
           <span class="sidebar-link">Dashboard</span>
         </a>
       </li>
 
       <div class="dropdown nav-link link-body-emphasis">
-        <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle" 
+        data-bs-toggle="dropdown" aria-expanded="false"
+        (click)="notCollapsedSidebar()"
+        >
           <i class="bi bi-box-arrow-up-right me-2"></i>
           <span class="sidebar-link">Links</span>
         </a>
-        <ul class="dropdown-menu text-small shadow">
+        <ul class="dropdown-menu text-small shadow ">
           <li><a class="dropdown-item" [routerLink]="'/files-manager'">Files Manager</a></li>
           <li><a class="dropdown-item" href="#">Profile</a></li>
           <li><hr class="dropdown-divider"></li>

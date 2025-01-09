@@ -62,5 +62,15 @@ export class AuthService {
         return 
       }
     }
+
+    getUserId():number{
+      const token = this.getToken()
+      if(token !== null){
+        const payload = this.loadDataFromToken(token)
+        const userId = payload?.userId
+        return userId? userId : 0
+      }
+      return 0
+    }
   
 }

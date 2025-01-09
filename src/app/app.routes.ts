@@ -17,6 +17,7 @@ import { gruposServiciodelcampoComponent } from './views/grupos-serviciodelcampo
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { MicuentaComponent } from './views/micuenta/micuenta.component';
 import { ConfiguracionComponent } from './views/configuracion/configuracion.component';
+import { NotificationComponent } from './views/notifications/notification.component';
 
 
 export const routes: Routes = [
@@ -74,6 +75,12 @@ export const routes: Routes = [
         component: DashboardComponent,
         canActivate: [AuthGuard,RoleGuard],
         data: { roles: ['admin'] },
+    },
+    {
+        path: "notifications",
+        component: NotificationComponent,
+        canActivate: [AuthGuard,RoleGuard],
+        data: { roles: ['admin','user'] },
     },
     {
         path: "files-manager",

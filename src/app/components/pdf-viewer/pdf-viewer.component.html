@@ -7,13 +7,7 @@
   </div>
 
   <!-- Vista PDF -->
-  <pdf-viewer
-    [src]="pdfSrc"
-    [zoom]="zoom"
-    [page]="page"
-    [show-all]="showAll"
-    class="d-block w-100 custom-height"
-    (after-load-complete)="onPdfLoaded()"
-    (error)="onPdfError($event)">
+  <pdf-viewer *ngIf="pdfBlobUrl" [src]="pdfBlobUrl || undefined" [zoom]="zoom" [page]="page" [show-all]="showAll"
+    class="d-block w-100 custom-height" (after-load-complete)="onPdfLoaded()" (error)="onPdfError($event)">
   </pdf-viewer>
 </div>

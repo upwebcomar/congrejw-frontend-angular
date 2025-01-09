@@ -1,0 +1,64 @@
+<div class="container mt-3">
+  <h2>Enviar Notificación</h2>
+  <form [formGroup]="notificationForm" (ngSubmit)="sendNotification()">
+    <!-- Selección de usuario -->
+    <div class="mb-3">
+      <label for="user" class="form-label">Seleccionar Usuario</label>
+      <select 
+        id="user" 
+        class="form-select" 
+        formControlName="userId"
+        [class.is-invalid]="notificationForm.get('userId')?.invalid && notificationForm.get('userId')?.touched"
+      >
+        <option value="" disabled>Seleccione un usuario</option>
+        <option *ngFor="let user of users" [value]="user.id">{{ user.username }}</option>
+      </select>
+      <div class="invalid-feedback">
+        Seleccione un usuario.
+      </div>
+    </div>
+
+    <!-- Tipo de notificación -->
+    <div class="mb-3">
+      <label for="type" class="form-label">Tipo de Notificación</label>
+      <select 
+        id="type" 
+        class="form-select" 
+        formControlName="type"
+        [class.is-invalid]="notificationForm.get('type')?.invalid && notificationForm.get('type')?.touched"
+      >
+        <option value="" disabled>Seleccione un tipo</option>
+        <option value="success">Éxito</option>
+        <option value="info">Información</option>
+        <option value="warning">Advertencia</option>
+        <option value="error">Error</option>
+      </select>
+      <div class="invalid-feedback">
+        Seleccione un tipo de notificación.
+      </div>
+    </div>
+
+    <!-- Mensaje -->
+    <div class="mb-3">
+      <label for="message" class="form-label">Mensaje</label>
+      <textarea 
+        id="message" 
+        class="form-control" 
+        rows="3" 
+        formControlName="message"
+        [class.is-invalid]="notificationForm.get('message')?.invalid && notificationForm.get('message')?.touched"
+      ></textarea>
+      <div class="invalid-feedback">
+        El mensaje es obligatorio.
+      </div>
+    </div>
+
+    <!-- Botón de enviar -->
+    <button 
+      type="submit" 
+      class="btn btn-primary" 
+      [disabled]="notificationForm.invalid">
+      Enviar Notificación
+    </button>
+  </form>
+</div>

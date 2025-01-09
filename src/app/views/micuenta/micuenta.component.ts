@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { JwtPayload } from '../../auth/jwt-payload.interface';
+import { LoggerService } from '../../services/logger.service';
 
 @Component({
   selector: 'app-micuenta',
@@ -39,10 +40,12 @@ import { JwtPayload } from '../../auth/jwt-payload.interface';
   ],
 })
 export class MicuentaComponent implements OnInit {
+
   profileForm: FormGroup;
   isEditing = false;
-  jwtPayload: any
-  user:any
+  jwtPayload: any;
+  user:any;
+  private context = 'MicuentaComponent';
 
   constructor(
     private authService: AuthService,
@@ -50,6 +53,7 @@ export class MicuentaComponent implements OnInit {
     private appState: AppStateService,
     private fb: FormBuilder,
     private http: HttpClient,
+    private logger: LoggerService
      
   ) {
     const initialProfile: UserProfile = {
@@ -57,6 +61,7 @@ export class MicuentaComponent implements OnInit {
       email: '',
       phone: '',
       address: '',
+      profile: ''
     };
 
     this.profileForm = this.fb.group({
@@ -79,14 +84,10 @@ export class MicuentaComponent implements OnInit {
 
     if (token) { 
       this.jwtPayload = this.authService.loadDataFromToken(token)
-      console.log(this.jwtPayload);
-      
     }
-
-    this.http.get<any>(`${environment.apiUrl}/users/${this.jwtPayload?.userId}`).subscribe({
+    this.http.get<UserProfile>(`${environment.apiUrl}/users/${this.jwtPayload?.userId}`).subscribe({
       next: (data) => {
-      
-          console.log('data',data);
+          this.logger.log(this.context,'data',data);
           this.profileForm.patchValue(data.profile); // Se espera que `data` tenga las mismas claves que el formulario
 
       },

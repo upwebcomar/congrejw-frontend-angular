@@ -1,1 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+    /* font-size: 1.2rem;  Cambia a tu preferencia */
+    font-weight: 600; /* Cambia a tu preferencia */
+  }
+.nav-link {
+    font-size: 1.2rem; /* Cambia a tu preferencia */
+    font-weight: 600; /* Cambia a tu preferencia */
+  }
+  
+.dropdown-item {
+    font-weight: 600; /* Cambia a tu preferencia */
+}

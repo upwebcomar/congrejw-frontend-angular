@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, ViewChild, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { NavbarService } from './navbar.service';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { AppStateService } from '../../services/app-state.service';
@@ -7,11 +7,14 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RoleService } from '../../auth/roles/role.service';
 import { LoggerService } from '../../services/logger.service';
+import { NotificationComponent } from '../../views/notifications/notification.component';
+import { NotificationService } from '../../services/notifications/notification.service';
+import { Notification } from '../../views/notifications/notification.interface';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule,NotificationComponent],
   templateUrl: './navbar.component.html',
   styles: ``
 })
@@ -25,6 +28,8 @@ export class NavbarComponent implements AfterViewInit, OnDestroy {
   isTieneRolPermitido: boolean = false
   roles!: string[];
   private context:string = 'NavbarComponent'
+  notifications!:Notification[]
+ 
 
   // Roles permitidos para cada acción
   rolesPermitidos = {
@@ -32,15 +37,20 @@ export class NavbarComponent implements AfterViewInit, OnDestroy {
     user: ['admin', 'user'],  // Roles permitidos para editar un anuncio
     admin: ['admin'], // Roles permitidos para borrar un anuncio
   };
+  notiVisibilitySubs: BehaviorSubject<boolean>;
 
   constructor(
     private navbarService: NavbarService,
     private appState: AppStateService,
     private cdr: ChangeDetectorRef,
     private rolesService: RoleService,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private notificationsService: NotificationService,
+    
   ) {
-
+    // Estado de las notificaciones
+    this.notiVisibilitySubs = this.notificationsService.notifyVisibility
+    this.notificationsService.notifications$.subscribe(value=>{this.notifications = value})
   }
 
 
@@ -73,6 +83,7 @@ export class NavbarComponent implements AfterViewInit, OnDestroy {
 
 
       if (data) {
+        // actualizo link micuenta
         this.appState.userState$.subscribe(newText => {
           this.login.nativeElement.textContent = newText;
           this.loginLink = 'micuenta'
@@ -91,6 +102,10 @@ export class NavbarComponent implements AfterViewInit, OnDestroy {
     })
   }
 
+  toggleNotify(event: Event): void {
+    event.preventDefault(); // Previene el comportamiento predeterminado del enlace
+    this.notiVisibilitySubs.next(true)
+  }
 
   ngOnDestroy(): void {
     this.loggedSubscription.unsubscribe();

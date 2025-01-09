@@ -4,6 +4,8 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { DashboardComponentService } from './dasboard-component.service';
 import { CommonModule } from '@angular/common';
 import { UsersComponent } from './views/users/users.component';
+import { SidebarService } from './sidebar/sidebar.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,13 +16,24 @@ import { UsersComponent } from './views/users/users.component';
 })
 export class DashboardComponent implements AfterViewInit {
   @ViewChild('dashboardContainer', { read: ViewContainerRef }) container!: ViewContainerRef;
+    sidebarItem$:BehaviorSubject<string>;
+  
 
-  constructor(private widgetRegistry: DashboardComponentService) {}
-  ngAfterViewInit(): void {
-    this.loadWidget('users')
+  constructor(
+    private widgetRegistry: DashboardComponentService,
+    private sidebarService:SidebarService
+  ) {
+    this.sidebarItem$ = this.sidebarService.getSidebarItem()
+
   }
 
- 
+  ngAfterViewInit(): void {
+    this.sidebarItem$.subscribe({next:data => {
+      this.loadWidget(data);
+      }
+    })
+    
+  }
 
   loadWidget(widgetName: string): void {
     const component = this.widgetRegistry.getWidgetComponent(widgetName);

@@ -3,5 +3,6 @@ export interface UserProfile {
     email: string;
     phone: string;
     address: string;
+    profile: any
   }
   

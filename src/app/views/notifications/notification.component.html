@@ -1,0 +1,25 @@
+<ng-container *ngIf="notifyVisibility">
+  <div 
+    class="position-fixed top-2 end-0 p-3" 
+    style="z-index: 1050; max-width: 90vw; overflow-y: auto; max-height: 80vh;"
+  >
+    <div 
+      *ngFor="let notification of notifications" 
+      class="toast show mb-2" 
+      [ngClass]="toastClass(notification.type)"
+    >
+      <div class="toast-header">
+        <strong class="me-auto">{{ notification.type | titlecase }}</strong>
+        <button 
+          type="button" 
+          class="btn-close" 
+          (click)="removeNotification(notification.id)" 
+          aria-label="Close">
+        </button>
+      </div>
+      <div class="toast-body">
+        {{ notification.message }}
+      </div>
+    </div>
+  </div>
+</ng-container>

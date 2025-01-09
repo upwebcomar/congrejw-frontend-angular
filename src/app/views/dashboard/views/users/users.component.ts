@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { AllUserDto } from './all-users.dto';
+import { AllUserDto } from '../../../../services/users/all-users.dto';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment';
 import { LoggerService } from '../../../../services/logger.service';
+import { RoleService } from '../../../../auth/roles/role.service';
+import { UsersService } from '../../../../services/users/users.service';
 
 @Component({
     imports: [CommonModule],
@@ -14,11 +16,15 @@ import { LoggerService } from '../../../../services/logger.service';
 export class UsersComponent implements OnInit {
     users!: AllUserDto[]
 
-    roles = ['admin', 'user', 'editor'];
+    roles: string [] = [];
     private context = 'UsersComponent'
 
-    constructor(private http: HttpClient, private logger:LoggerService){
-
+    constructor(
+      private http: HttpClient, private logger:LoggerService,
+      private roleService: RoleService,
+      private usersService: UsersService
+    ){
+      this.roles = this.roleService.getRolesPermitidos()
     }
     ngOnInit(): void {
         this.getUsers()
@@ -27,10 +33,9 @@ export class UsersComponent implements OnInit {
     
 
     getUsers(){
-        this.http.get<AllUserDto[]>(environment.apiUrl+'/users').subscribe({
+        this.usersService.getUsers().subscribe({
                 next:data=>{
                     this.users = data
-                    console.log(this.context,'Usuarios',data);
                     
                 },
                 error:error=>{this.logger.log(this.context,error);

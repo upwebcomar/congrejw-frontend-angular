@@ -6,7 +6,12 @@ import { JwtPayload } from '../jwt-payload.interface';
   providedIn: 'root',
 })
 export class RoleService {
+
+  // Roles del usuario presentes en el payload del usuario
   private roles: string[] = []; // Propiedad para almacenar los roles
+
+  // Roles permitidos en la aplicacion
+  private rolesPermitidos = ['admin', 'user', 'editor'];
 
   constructor() {
     const token = this.getToken(); // Intenta recuperar el token al iniciar
@@ -50,6 +55,10 @@ export class RoleService {
   // Obtiene los roles cargados
   getRoles(): string[] {
     return this.roles;
+  }
+  // Obtiene los roles permitidos en la app
+  getRolesPermitidos(): string[] {
+    return this.rolesPermitidos;
   }
 
   // Verifica si el usuario tiene un rol específico
