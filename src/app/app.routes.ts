@@ -18,6 +18,7 @@ import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { MicuentaComponent } from './views/micuenta/micuenta.component';
 import { ConfiguracionComponent } from './views/configuracion/configuracion.component';
 import { NotificationComponent } from './views/notifications/notification.component';
+import { BooksGridComponent } from './views/lectura-biblia/books-grid.component';
 
 
 export const routes: Routes = [
@@ -81,6 +82,12 @@ export const routes: Routes = [
         component: NotificationComponent,
         canActivate: [AuthGuard,RoleGuard],
         data: { roles: ['admin','user'] },
+    },
+    {
+        path: "mi-lectura-biblia",
+        component: BooksGridComponent,
+        canActivate: [AuthGuard,RoleGuard],
+        data: { roles: ['user'] },
     },
     {
         path: "files-manager",

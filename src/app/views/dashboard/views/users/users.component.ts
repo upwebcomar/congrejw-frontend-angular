@@ -24,7 +24,6 @@ export class UsersComponent implements OnInit {
       private roleService: RoleService,
       private usersService: UsersService
     ){
-      this.roles = this.roleService.getRolesPermitidos()
     }
     ngOnInit(): void {
         this.getUsers()

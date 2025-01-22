@@ -1,0 +1,26 @@
+<div class="container">
+  <div *ngIf="isvisibilityBooks" class="books-container">
+    <div *ngFor="let book of books" class="book" (click)="selectBook(book)">
+      {{ book.name | slice:0:3 }} <!-- Muestra las primeras 3 letras del nombre del libro -->
+  
+    </div>
+  </div>
+  
+  <!-- Mostrar capítulos solo si el libro está seleccionado y visible -->
+  <div *ngIf="selectedBook && isBookVisible(selectedBook)" class="chapters-container">
+    <h2 class="book" (click)="visibilityBooks(selectedBook)">
+      {{ selectedBook.name }}
+      <!-- Flecha para alternar visibilidad -->
+      <span>
+        <i [class]="'arrow-up'"></i>
+      </span>
+    </h2>
+  
+    <div class="chapters-grid">
+      <div *ngFor="let chapter of chapters" class="chapter" [class.read]="isChapterRead(chapter)"
+        (click)="toggleChapter(chapter)">
+        {{ chapter }}
+      </div>
+    </div>
+  </div>
+</div>

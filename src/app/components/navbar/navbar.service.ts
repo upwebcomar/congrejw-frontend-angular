@@ -7,9 +7,10 @@ import { BehaviorSubject, Subject } from 'rxjs';
 export class NavbarService {
   private loginTextSource = new BehaviorSubject<string>('-');
   private loginHrefSource = new BehaviorSubject<string>('login');
+  private actualizaNavbar = new Subject<void>();
   loginText$ = this.loginTextSource.asObservable();
   loginHref$ = this.loginHrefSource.asObservable();
-
+  actualizarNavbar$ = this.actualizaNavbar.asObservable();
 
   updateLoginText(newText: string) {
     this.loginTextSource.next(newText);
@@ -17,8 +18,7 @@ export class NavbarService {
   updateLoginHref(path: string) {
     this.loginHrefSource.next(path);
   }
-  private actualizaNavbar = new Subject<void>();
-  actualizarNavbar$ = this.actualizaNavbar.asObservable();
+
 
   actualizarNavbar() {
     this.actualizaNavbar.next();

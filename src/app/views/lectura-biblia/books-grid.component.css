@@ -1,0 +1,91 @@
+.books-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Asegura que haya al menos 120px por libro */
+  gap: 2px; /* Espacio entre libros */
+  margin-bottom: 5px;
+  width: 100%; /* Asegura que el contenedor ocupe todo el ancho disponible */
+}
+
+.chapters-container {
+  margin-top: 20px;
+}
+
+.chapters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); /* Ajuste para capítulos */
+  gap: 2px;
+}
+
+.book, .chapter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px; /* Asegura que los capítulos sean cuadrados */
+  width: 100px; /* Asegura que los capítulos sean cuadrados */
+  background: #eee; /* Fondo gris claro */
+  border-radius: 8px; /* Bordes redondeados */
+  cursor: pointer; /* Puntero al pasar el mouse */
+  transition: background 0.3s; /* Transición suave */
+  font-weight: bold;
+  text-align: center;
+}
+
+.book:hover, .chapter:hover {
+  background: #c9c8c8; /* Fondo más oscuro al pasar el mouse */
+}
+
+.chapter.read {
+  background: linear-gradient(45deg, rgb(89, 243, 97), green); /* Degradado para capítulos leídos */
+}
+
+.book {
+  font-size: 1.2rem; /* Tamaño de fuente de las siglas */
+}
+
+.chapter {
+  font-size: 1.5rem; /* Tamaño de fuente para capítulos */
+}
+
+/* Flechas para alternar visibilidad */
+.arrow-up::before {
+  content: "↑";
+  font-size: 1.5rem;
+  margin-left: 10px;
+}
+
+.arrow-down::before {
+  content: "↓";
+  font-size: 1.5rem;
+  margin-left: 10px;
+}
+h2.book {
+  font-size: clamp(1rem, 2vw, 2.5rem); /* Ajusta dinámicamente el tamaño de fuente */
+  overflow: visible; /* Oculta cualquier contenido que desborde */
+  text-overflow: ellipsis; /* Muestra "..." si el texto es demasiado largo */
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  text-align: center; /* Centra el texto dentro del contenedor */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1px; /* Espacio entre el texto y la flecha */
+  width: 200px;
+}
+
+/* Media query para dispositivos pequeños */
+@media (max-width: 768px) {
+  .book, .chapter {
+    height: 50px; /* Mitad del tamaño general */
+    width: 50px; /* Mitad del tamaño general */
+    font-size: 0.8rem; /* Reduce también el tamaño de fuente */
+  }
+
+  .books-container {
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); /* Ajusta el mínimo para los libros */
+    gap: 2px; /* Espacio reducido entre cuadrados */
+  }
+
+  .chapters-grid {
+    grid-template-columns: repeat(auto-fill, minmax(30px, 1fr)); /* Ajusta el mínimo para los capítulos */
+    gap: 2px; /* Espacio reducido entre capítulos */
+  }
+}

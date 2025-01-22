@@ -28,10 +28,10 @@
                 <li><a class="dropdown-item" href="https://docs.google.com/forms/d/10Vj89Sifh4zvZbHgCL_A7Gyn121lz1Z4-jvXMzN2k4A/edit?usp=drivesdk">Informe Predicación</a></li>
                 <li><a class="dropdown-item" href="https://jworg.zoom.us/j/5123738503?pwd=238853&omn=84065870173">Zoom</a></li>
                 <li><a class="dropdown-item" routerLink="/home">Telefonica</a></li>
-                <li><a class="dropdown-item" routerLink="/home">Mi lectura de la Biblia</a></li>
+                <li><a class="dropdown-item" routerLink="/mi-lectura-biblia">Mi lectura de la Biblia</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" routerLink="/config">Configuración</a></li>
-                <li *ngIf="isTieneRolPermitido"><a class="dropdown-item" routerLink="/dashboard">Administración</a></li>
+                <li *ngIf="isTieneRolPermitido(['admin'])"><a class="dropdown-item" routerLink="/dashboard">Administración</a></li>
                 <li><a class="dropdown-item" href="#">Ayuda</a></li>
               </ul>
             </li>

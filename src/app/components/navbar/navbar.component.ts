@@ -25,18 +25,10 @@ export class NavbarComponent implements AfterViewInit, OnDestroy {
   private actualizaNavBarSubscription!: Subscription;
   loginLink: string = 'login';
   isLogged: boolean = false;
-  isTieneRolPermitido: boolean = false
   roles!: string[];
   private context:string = 'NavbarComponent'
   notifications!:Notification[]
  
-
-  // Roles permitidos para cada acción
-  rolesPermitidos = {
-    editor: ['admin', 'editor'], // Roles permitidos para agregar un anuncio
-    user: ['admin', 'user'],  // Roles permitidos para editar un anuncio
-    admin: ['admin'], // Roles permitidos para borrar un anuncio
-  };
   notiVisibilitySubs: BehaviorSubject<boolean>;
 
   constructor(
@@ -53,18 +45,6 @@ export class NavbarComponent implements AfterViewInit, OnDestroy {
     this.notificationsService.notifications$.subscribe(value=>{this.notifications = value})
   }
 
-
-  /* 
-    Cuando sea necesario conservar el estado de navbarcomponent al navegar directamente en las rutas del navegador
-      implementar un NavbarStateResolver y utilizar resolve en la ruta
-      {
-        path: 'some-path',
-        component: NavbarComponent,
-        resolve: {
-          navbarState: NavbarStateResolver
-        }
-  */
-
   ngAfterViewInit(): void {
     this.actualizarNavbar();
     this.actualizaNavBarSubscription = this.navbarService.actualizarNavbar$.subscribe(() => {
@@ -72,16 +52,13 @@ export class NavbarComponent implements AfterViewInit, OnDestroy {
     });
   }
   // Métodos para verificar los roles permitidos
-  tieneRolPermitido(accion: 'editor' | 'user' | 'admin'): boolean {
-    this.roles = this.rolesService.getRoles(); // Cargo los roles del usuario
-    const value = this.roles.some((role) => this.rolesPermitidos[accion].includes(role));
-    return value
+  isTieneRolPermitido(accion: string[]): boolean {
+    return this.rolesService.hasAnyRole(accion)
   }
   actualizarNavbar() {
     // Si al abrir la aplicacion hay un token valido actualizo el navbar en login
-    this.loggedSubscription = this.appState.logged$.subscribe(data => {
-
-
+    this.appState.logged$.subscribe(data => {
+      
       if (data) {
         // actualizo link micuenta
         this.appState.userState$.subscribe(newText => {
@@ -89,11 +66,9 @@ export class NavbarComponent implements AfterViewInit, OnDestroy {
           this.loginLink = 'micuenta'
         })
         this.isLogged = data;
-        this.isTieneRolPermitido = this.tieneRolPermitido('admin')
         this.cdr.detectChanges(); // Forza la detección de cambios para evitar el error
       } else {
         this.isLogged = data
-        this.isTieneRolPermitido = this.tieneRolPermitido('admin')
         this.login.nativeElement.textContent = 'Loguear';
         this.loginLink = 'login';
         this.cdr.detectChanges(); // Forza la detección de cambios para evitar el error
