@@ -6,3 +6,5 @@ export const environment = {
     disallowedRoutes: ['http://localhost:3000/auth/login']
   };
   
+
+  // no olvidar indicar las mismas variables en el environment.prod.ts y en el init.sh
