@@ -1,34 +1,105 @@
 <div class="container mt-4">
-  <h2>Gestión de Permisos</h2>
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>Usuario</th>
-        <th>Roles</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let user of users">
-        <td>{{ user.username }}</td>
-        <td>
-          <div *ngFor="let role of roles" class="form-check form-check-inline">
-            <input
-              type="checkbox"
-              class="form-check-input"
-              [id]="user.id + '-' + role"
-              [checked]="user.roles.includes(role)"
-              (change)="toggleRole(user, role)"
-            />
-            <label class="form-check-label" [for]="user.id + '-' + role">
-              {{ role }}
-            </label>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <!-- Botón de Actualizar -->
-  <div class="text-end mt-3">
-    <button class="btn btn-primary" (click)="saveChanges()">Actualizar Roles</button>
-  </div>
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        [class]="usersTabsClass"
+        (click)="usersTabsClick()"
+        aria-current="page"
+        >Usuarios</a
+      >
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" [class]="rolesTabsClass" (click)="rolesTabsClick()"
+        >Roles</a
+      >
+    </li>
+  </ul>
+
+  <!-- Gestión de Permisos -->
+  <ng-container *ngIf="usersTabsClass.includes('active')">
+    <h2 class="mt-4">Gestión de Permisos</h2>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Usuario</th>
+          <th>Roles</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.username }}</td>
+          <td>
+            <div
+              *ngFor="let role of roles"
+              class="form-check form-check-inline"
+            >
+              <input
+                type="checkbox"
+                class="form-check-input"
+                [id]="user.id + '-' + role.rol"
+                [checked]="user.roles.includes(role.rol)"
+                (change)="toggleRole(user, role.rol)"
+              />
+              <label class="form-check-label" [for]="user.id + '-' + role.rol">
+                {{ role.rol }}
+              </label>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="text-end mt-3">
+      <button class="btn btn-primary" (click)="saveChanges()">
+        Actualizar Roles
+      </button>
+    </div>
+  </ng-container>
+
+  <!-- Roles de Permisos -->
+  <ng-container *ngIf="rolesTabsClass.includes('active')">
+    <h2 class="mt-4">Roles de Permisos</h2>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Rol</th>
+          <th>Observación</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let role of roles">
+          <td>{{ role.id }}</td>
+          <td>{{ role.rol }}</td>
+          <td>{{ role.obs }}</td>
+          <td>
+            <button class="btn btn-danger btn-sm" (click)="deleteRole(role)">
+              Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="mt-3">
+      <label for="newRole" class="form-label">Agregar Nuevo Rol</label>
+      <div class="input-group">
+        <input
+          type="text"
+          class="form-control"
+          id="newRole"
+          [(ngModel)]="newRole"
+          placeholder="Nombre del rol"
+        />
+        <input
+          type="text"
+          class="form-control"
+          id="newObs"
+          [(ngModel)]="newObs"
+          placeholder="Observaciones"
+        />
+        <button class="btn btn-success" (click)="addRole()">Agregar</button>
+      </div>
+    </div>
+  </ng-container>
 </div>

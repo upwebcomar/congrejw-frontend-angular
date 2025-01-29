@@ -22,16 +22,17 @@
   justify-content: center;
   height: 100px; /* Asegura que los capítulos sean cuadrados */
   width: 100px; /* Asegura que los capítulos sean cuadrados */
-  background: #eee; /* Fondo gris claro */
+  background: #62366e; /* Fondo gris claro */
   border-radius: 8px; /* Bordes redondeados */
   cursor: pointer; /* Puntero al pasar el mouse */
   transition: background 0.3s; /* Transición suave */
   font-weight: bold;
   text-align: center;
+  color: white;
 }
 
 .book:hover, .chapter:hover {
-  background: #c9c8c8; /* Fondo más oscuro al pasar el mouse */
+  background: #e4b0f1; /* Fondo más oscuro al pasar el mouse */
 }
 
 .chapter.read {
@@ -40,6 +41,7 @@
 
 .book {
   font-size: 1.2rem; /* Tamaño de fuente de las siglas */
+  
 }
 
 .chapter {
@@ -74,8 +76,8 @@ h2.book {
 /* Media query para dispositivos pequeños */
 @media (max-width: 768px) {
   .book, .chapter {
-    height: 50px; /* Mitad del tamaño general */
-    width: 50px; /* Mitad del tamaño general */
+    height: 60px; /* Mitad del tamaño general */
+    width: 60px; /* Mitad del tamaño general */
     font-size: 0.8rem; /* Reduce también el tamaño de fuente */
   }
 
@@ -85,7 +87,7 @@ h2.book {
   }
 
   .chapters-grid {
-    grid-template-columns: repeat(auto-fill, minmax(30px, 1fr)); /* Ajusta el mínimo para los capítulos */
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); /* Ajusta el mínimo para los capítulos */
     gap: 2px; /* Espacio reducido entre capítulos */
   }
 }
