@@ -1,5 +1,10 @@
 <div class="container my-5">
-  <form [formGroup]="anuncioForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+  <form
+    [formGroup]="anuncioForm"
+    (ngSubmit)="onSubmit()"
+    class="needs-validation"
+    novalidate
+  >
     <!-- Título -->
     <div class="mb-3">
       <label for="titulo" class="form-label">Título</label>
@@ -29,15 +34,17 @@
     </div>
     <!-- Subir archivo PDF -->
     <div class="mb-3">
-      <label for="file" class="form-label">Subir archivo PDF</label>
+      <label for="file" class="form-label">Subir archivo PDF o Imagen</label>
       <input
         id="file"
         type="file"
         class="form-control"
         (change)="onFileSelected($event)"
-        accept="application/pdf"
+        accept="application/pdf , image/*"
       />
-      <div class="form-text">El archivo debe estar en formato PDF.</div>
+      <div class="form-text">
+        El archivo debe estar en formato PDF o Imagen.
+      </div>
     </div>
     <!-- Página -->
     <div class="mb-3">
@@ -59,14 +66,16 @@
         id="show_all"
         formControlName="show_all"
       />
-      <label class="form-check-label" for="show_all">Mostrar todo el documento</label>
+      <label class="form-check-label" for="show_all"
+        >Mostrar todo el documento</label
+      >
     </div>
-
-
 
     <!-- Botón de envío -->
     <div class="d-grid">
-      <button type="submit" class="btn btn-primary btn-lg">Crear Anuncio</button>
+      <button type="submit" class="btn btn-primary btn-lg">
+        Crear Anuncio
+      </button>
     </div>
   </form>
 </div>

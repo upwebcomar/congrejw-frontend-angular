@@ -1,6 +1,9 @@
 .books-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Asegura que haya al menos 120px por libro */
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(120px, 1fr)
+  ); /* Asegura que haya al menos 120px por libro */
   gap: 2px; /* Espacio entre libros */
   margin-bottom: 5px;
   width: 100%; /* Asegura que el contenedor ocupe todo el ancho disponible */
@@ -12,11 +15,15 @@
 
 .chapters-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); /* Ajuste para capítulos */
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(80px, 1fr)
+  ); /* Ajuste para capítulos */
   gap: 2px;
 }
 
-.book, .chapter {
+.book,
+.chapter {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -31,17 +38,21 @@
   color: white;
 }
 
-.book:hover, .chapter:hover {
+.book:hover,
+.chapter:hover {
   background: #e4b0f1; /* Fondo más oscuro al pasar el mouse */
 }
 
 .chapter.read {
-  background: linear-gradient(45deg, rgb(89, 243, 97), green); /* Degradado para capítulos leídos */
+  background: linear-gradient(
+    45deg,
+    rgb(89, 243, 97),
+    green
+  ); /* Degradado para capítulos leídos */
 }
 
 .book {
   font-size: 1.2rem; /* Tamaño de fuente de las siglas */
-  
 }
 
 .chapter {
@@ -61,7 +72,11 @@
   margin-left: 10px;
 }
 h2.book {
-  font-size: clamp(1rem, 2vw, 2.5rem); /* Ajusta dinámicamente el tamaño de fuente */
+  font-size: clamp(
+    1rem,
+    2vw,
+    2.5rem
+  ); /* Ajusta dinámicamente el tamaño de fuente */
   overflow: visible; /* Oculta cualquier contenido que desborde */
   text-overflow: ellipsis; /* Muestra "..." si el texto es demasiado largo */
   white-space: nowrap; /* Evita que el texto se divida en varias líneas */
@@ -75,19 +90,26 @@ h2.book {
 
 /* Media query para dispositivos pequeños */
 @media (max-width: 768px) {
-  .book, .chapter {
+  .book,
+  .chapter {
     height: 60px; /* Mitad del tamaño general */
     width: 60px; /* Mitad del tamaño general */
     font-size: 0.8rem; /* Reduce también el tamaño de fuente */
   }
 
   .books-container {
-    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); /* Ajusta el mínimo para los libros */
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(60px, 1fr)
+    ); /* Ajusta el mínimo para los libros */
     gap: 2px; /* Espacio reducido entre cuadrados */
   }
 
   .chapters-grid {
-    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); /* Ajusta el mínimo para los capítulos */
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(40px, 1fr)
+    ); /* Ajusta el mínimo para los capítulos */
     gap: 2px; /* Espacio reducido entre capítulos */
   }
 }

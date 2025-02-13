@@ -1,58 +1,166 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container d-flex">
-      <a class="navbar-brand" href="#">
-        <img src="/assets/nav-brand-icon.svg" alt="Bootstrap" width="30" height="24">
-        CongreJW
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-        <ul class="navbar-nav mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" [routerLink] ="'/'">Inicio</a>
-          </li>
-          <li class="nav-item">
-            <a #login class="nav-link" [routerLink] ="loginLink">Mi Cuenta</a>
-          </li>
-          <ng-container *ngIf="isLogged" >
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Menu
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" routerLink = "/tablero-anuncios">Tablero Anuncios</a></li>
-                <li><a class="dropdown-item" href="https://docs.google.com/spreadsheets/d/1kZKC6m79JEXS14zl25oGDaWfdksOJQRUwiZM-_QeVHk/edit?usp=sharing">Discursos Públicos</a></li>
-                <li><a class="dropdown-item" routerLink="/grupos-servicio-campo">Grupos Serv. Campo</a></li>
-                <li><a class="dropdown-item" href="https://goo.gl/maps/2M99ZkzkYZwEgipm8">Territorios</a></li>
-                <li><a class="dropdown-item" href="https://docs.google.com/forms/d/10Vj89Sifh4zvZbHgCL_A7Gyn121lz1Z4-jvXMzN2k4A/edit?usp=drivesdk">Informe Predicación</a></li>
-                <li><a class="dropdown-item" href="https://jworg.zoom.us/j/5123738503?pwd=238853&omn=84065870173">Zoom</a></li>
-                <li><a class="dropdown-item" routerLink="/home">Telefonica</a></li>
-                <li><a class="dropdown-item" routerLink="/mi-lectura-biblia">Mi lectura de la Biblia</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" routerLink="/config">Configuración</a></li>
-                <li *ngIf="isTieneRolPermitido(['admin'])"><a class="dropdown-item" routerLink="/dashboard">Administración</a></li>
-                <li><a class="dropdown-item" href="#">Ayuda</a></li>
-              </ul>
-            </li>
-          </ng-container>
-          
-          <li class="nav-item position-relative">
-            <a class="nav-link" (click)="toggleNotify($event)">
-              <i class="bi bi-bell"></i>
-              <!-- Badge dinámico -->
-              <span 
-                *ngIf="notifications.length > 0 && isLogged" 
-                class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger">
-                {{ notifications.length }}
-                <span class="visually-hidden">Notificaciones sin leer</span>
-              </span>
+  <div class="container d-flex">
+    <a class="navbar-brand" href="#">
+      <img
+        src="/assets/nav-brand-icon.svg"
+        alt="Bootstrap"
+        width="30"
+        height="24"
+      />
+      CongreJW
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div
+      class="collapse navbar-collapse justify-content-end"
+      id="navbarSupportedContent"
+    >
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="'/'">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a #login class="nav-link" [routerLink]="loginLink">Mi Cuenta</a>
+        </li>
+
+        <ng-container *ngIf="isLogged">
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              data-bs-auto-close="outside"
+            >
+              Menu
             </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" routerLink="/tablero-anuncios"
+                  >Tablero Anuncios</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="https://docs.google.com/spreadsheets/d/1kZKC6m79JEXS14zl25oGDaWfdksOJQRUwiZM-_QeVHk/edit?usp=sharing"
+                >
+                  Discursos Públicos
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" routerLink="/grupos-servicio-campo"
+                  >Grupos Serv. Campo</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="https://goo.gl/maps/2M99ZkzkYZwEgipm8"
+                  >Territorios</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="https://docs.google.com/forms/d/10Vj89Sifh4zvZbHgCL_A7Gyn121lz1Z4-jvXMzN2k4A/edit?usp=drivesdk"
+                >
+                  Informe Predicación
+                </a>
+              </li>
+
+              <!-- Submenú de Chats -->
+              <li class="dropdown">
+                <a
+                  class="dropdown-item dropdown-toggle"
+                  href="#"
+                  (click)="toggleSubmenu($event)"
+                >
+                  Chats
+                </a>
+                <ul class="dropdown-menu dropdown-submenu" #submenu>
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="https://chat.whatsapp.com/EHRASchcyw63QLkA4ojAWW"
+                    >
+                      <i class="bi bi-whatsapp"></i> Congre Sur Alvear
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="https://chat.whatsapp.com/G7GRdJwrlKTAVT6k9BucKz"
+                    >
+                      <i class="bi bi-whatsapp"></i> Sur Alvear grupo 2
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="https://chat.whatsapp.com/B7jes6saC5wEQgK0HMaBhX"
+                    >
+                      <i class="bi bi-whatsapp"></i> Tablero de Anuncios Sur
+                      Alvear
+                    </a>
+                  </li>
+                </ul>
+              </li>
+
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="https://jworg.zoom.us/j/5123738503?pwd=238853&omn=84065870173"
+                  >Zoom</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" routerLink="/home">Telefonica</a>
+              </li>
+              <li>
+                <a class="dropdown-item" routerLink="/mi-lectura-biblia"
+                  >Mi lectura de la Biblia</a
+                >
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <a class="dropdown-item" routerLink="/config">Configuración</a>
+              </li>
+              <li *ngIf="isTieneRolPermitido(['admin'])">
+                <a class="dropdown-item" routerLink="/dashboard"
+                  >Administración</a
+                >
+              </li>
+              <li><a class="dropdown-item" href="#">Ayuda</a></li>
+            </ul>
           </li>
-        </ul>
-      </div>
+        </ng-container>
+
+        <li class="nav-item position-relative">
+          <a class="nav-link" (click)="toggleNotify($event)">
+            <i class="bi bi-bell"></i>
+            <span
+              *ngIf="notifications.length > 0 && isLogged"
+              class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger"
+            >
+              {{ notifications.length }}
+              <span class="visually-hidden">Notificaciones sin leer</span>
+            </span>
+          </a>
+        </li>
+      </ul>
     </div>
+  </div>
 
-      <app-notifications></app-notifications>
-
-  </nav>
+  <app-notifications></app-notifications>
+</nav>

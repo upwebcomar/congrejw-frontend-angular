@@ -1,0 +1,10 @@
+.dropdown-submenu.show {
+  display: block;
+  position: relative;
+  left: 5%;
+  top: 0;
+}
+
+.dropdown-submenu {
+  display: none;
+}

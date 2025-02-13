@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { AllUserDto } from '../../../../services/users/all-users.dto';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment';
@@ -31,12 +36,13 @@ interface Notification {
 export class SendNotificationComponent {
   notificationForm: FormGroup;
   users: AllUserDto[] = [];
-  private context = 'SendNotificationComponent'
+  private context = 'SendNotificationComponent';
 
   notifications: Notification[] = [];
 
-  constructor(private fb: FormBuilder, 
-    private http: HttpClient, 
+  constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
     private logger: LoggerService,
     private notifyService: NotificationService
   ) {
@@ -50,15 +56,13 @@ export class SendNotificationComponent {
 
   getUsers() {
     this.http.get<AllUserDto[]>(environment.apiUrl + '/users').subscribe({
-      next: data => {
-        this.users = data
-
+      next: (data) => {
+        this.users = data;
       },
-      error: error => {
+      error: (error) => {
         this.logger.log(this.context, error);
-      }
-    }
-    )
+      },
+    });
   }
 
   sendNotification() {
@@ -71,11 +75,14 @@ export class SendNotificationComponent {
         createdAt: new Date(),
       };
 
-      try{this.notifyService.addNotification(newNotification)}
-      catch(error) {this.logger.log(this.context,'Error al enviar notificacion',error)}
-      this.notifications.push(newNotification);
+      try {
+        this.notifyService.addNotification(newNotification);
+      } catch (error) {
+        this.logger.log(this.context, 'Error al enviar notificacion', error);
+      }
       this.notificationForm.reset();
-      this.logger.log(this.context,'Notificaciones:', this.notifications);
+      this.logger.log(this.context, 'Notificaciones:', this.notifications);
+      alert('Notificacion enviada');
     }
   }
 }

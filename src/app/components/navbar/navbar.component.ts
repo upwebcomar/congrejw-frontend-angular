@@ -1,4 +1,13 @@
-import { AfterViewInit, Component, ElementRef, ViewChild, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  ViewChild,
+  OnDestroy,
+  OnInit,
+  ChangeDetectorRef,
+  Renderer2,
+} from '@angular/core';
 import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
 import { NavbarService } from './navbar.service';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
@@ -14,9 +23,9 @@ import { Notification } from '../../views/notifications/notification.interface';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterModule, CommonModule,NotificationComponent],
+  imports: [RouterModule, CommonModule, NotificationComponent],
   templateUrl: './navbar.component.html',
-  styles: ``
+  styleUrl: './navbar.component.css',
 })
 export class NavbarComponent implements AfterViewInit, OnDestroy {
   @ViewChild('login') login!: ElementRef<HTMLAnchorElement>;
@@ -26,9 +35,10 @@ export class NavbarComponent implements AfterViewInit, OnDestroy {
   loginLink: string = 'login';
   isLogged: boolean = false;
   roles!: string[];
-  private context:string = 'NavbarComponent'
-  notifications!:Notification[]
- 
+  private context: string = 'NavbarComponent';
+  notifications!: Notification[];
+  @ViewChild('submenu') submenu!: ElementRef;
+
   notiVisibilitySubs: BehaviorSubject<boolean>;
 
   constructor(
@@ -38,48 +48,71 @@ export class NavbarComponent implements AfterViewInit, OnDestroy {
     private rolesService: RoleService,
     private logger: LoggerService,
     private notificationsService: NotificationService,
-    
+    private renderer: Renderer2
   ) {
     // Estado de las notificaciones
-    this.notiVisibilitySubs = this.notificationsService.notifyVisibility
-    this.notificationsService.notifications$.subscribe(value=>{this.notifications = value})
+    this.notiVisibilitySubs = this.notificationsService.notifyVisibility;
+    this.notificationsService.notifications$.subscribe((value) => {
+      this.notifications = value;
+    });
+    this.notificationsService.getNotifications();
   }
 
   ngAfterViewInit(): void {
     this.actualizarNavbar();
-    this.actualizaNavBarSubscription = this.navbarService.actualizarNavbar$.subscribe(() => {
-      this.actualizarNavbar();
-    });
+    this.actualizaNavBarSubscription =
+      this.navbarService.actualizarNavbar$.subscribe(() => {
+        this.actualizarNavbar();
+      });
   }
   // Métodos para verificar los roles permitidos
   isTieneRolPermitido(accion: string[]): boolean {
-    return this.rolesService.hasAnyRole(accion)
+    return this.rolesService.hasAnyRole(accion);
   }
   actualizarNavbar() {
     // Si al abrir la aplicacion hay un token valido actualizo el navbar en login
-    this.appState.logged$.subscribe(data => {
-      
+    this.appState.logged$.subscribe((data) => {
       if (data) {
         // actualizo link micuenta
-        this.appState.userState$.subscribe(newText => {
+        this.appState.userState$.subscribe((newText) => {
           this.login.nativeElement.textContent = newText;
-          this.loginLink = 'micuenta'
-        })
+          this.loginLink = 'micuenta';
+        });
         this.isLogged = data;
         this.cdr.detectChanges(); // Forza la detección de cambios para evitar el error
       } else {
-        this.isLogged = data
+        this.isLogged = data;
         this.login.nativeElement.textContent = 'Loguear';
         this.loginLink = 'login';
         this.cdr.detectChanges(); // Forza la detección de cambios para evitar el error
       }
-
-    })
+    });
   }
 
   toggleNotify(event: Event): void {
     event.preventDefault(); // Previene el comportamiento predeterminado del enlace
-    this.notiVisibilitySubs.next(true)
+    this.notiVisibilitySubs.next(true);
+  }
+
+  toggleSubmenu(event: Event) {
+    event.preventDefault();
+
+    // Verificar si el submenú existe
+    if (this.submenu) {
+      const isShow = this.submenu.nativeElement.classList.contains('show');
+
+      // Si el submenú no estaba abierto, abrirlo
+      if (isShow) {
+        this.renderer.removeClass(this.submenu.nativeElement, 'show');
+      } else {
+        this.renderer.addClass(this.submenu.nativeElement, 'show');
+      }
+    }
+  }
+
+  private closeAllSubmenus() {
+    const openMenus = document.querySelectorAll('.dropdown-menu.show');
+    openMenus.forEach((menu) => this.renderer.removeClass(menu, 'show'));
   }
 
   ngOnDestroy(): void {

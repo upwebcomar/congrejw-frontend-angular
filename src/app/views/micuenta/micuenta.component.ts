@@ -2,7 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { AppStateService } from '../../services/app-state.service';
 import { UserProfile } from './user-profile.interface';
 import { HttpClient } from '@angular/common/http';
@@ -40,11 +45,9 @@ import { LoggerService } from '../../services/logger.service';
   ],
 })
 export class MicuentaComponent implements OnInit {
-
   profileForm: FormGroup;
   isEditing = false;
-  jwtPayload: any;
-  user:any;
+  userId!: number;
   private context = 'MicuentaComponent';
 
   constructor(
@@ -54,63 +57,73 @@ export class MicuentaComponent implements OnInit {
     private fb: FormBuilder,
     private http: HttpClient,
     private logger: LoggerService
-     
   ) {
+    this.userId = this.authService.getUserId();
     const initialProfile: UserProfile = {
       name: '',
       email: '',
       phone: '',
       address: '',
-      profile: ''
+      profile: '',
     };
 
     this.profileForm = this.fb.group({
-      name: [initialProfile.name, [Validators.required, Validators.minLength(3)]],
+      name: [
+        initialProfile.name,
+        [Validators.required, Validators.minLength(3)],
+      ],
       email: [initialProfile.email, [Validators.required, Validators.email]],
-      phone: [initialProfile.phone, [Validators.required, Validators.pattern(/^\+?\d[\d\s\-]+$/)]],
+      phone: [
+        initialProfile.phone,
+        [Validators.required, Validators.pattern(/^\+?\d[\d\s\-]+$/)],
+      ],
       address: [initialProfile.address, []],
     });
   }
   ngOnInit(): void {
-    this.getUser()
-    
+    this.getUser();
   }
   toggleEdit() {
     this.isEditing = !this.isEditing;
   }
 
-  getUser(){
-    const token = this.authService.getToken()
-
-    if (token) { 
-      this.jwtPayload = this.authService.loadDataFromToken(token)
+  getUser() {
+    if (this.userId) {
+      this.http
+        .get<UserProfile>(`${environment.apiUrl}/users/${this.userId}`)
+        .subscribe({
+          next: (data) => {
+            this.logger.log(this.context, 'data', data);
+            this.profileForm.patchValue(data.profile); // Se espera que `data` tenga las mismas claves que el formulario
+          },
+          error: (error) => {
+            console.error('Error al obtener el Usuario:', error);
+            alert(
+              'Hubo un problema al cargar los datos del usuario. Por favor, intenta de nuevo más tarde.'
+            );
+          },
+        });
     }
-    this.http.get<UserProfile>(`${environment.apiUrl}/users/${this.jwtPayload?.userId}`).subscribe({
-      next: (data) => {
-          this.logger.log(this.context,'data',data);
-          this.profileForm.patchValue(data.profile); // Se espera que `data` tenga las mismas claves que el formulario
-
-      },
-      error: (error) => {
-        console.error('Error al obtener el Usuario:', error);
-        alert('Hubo un problema al cargar los datos del usuario. Por favor, intenta de nuevo más tarde.');
-      },
-    });
   }
-
 
   saveChanges() {
     if (this.profileForm.valid) {
-      this.http.put<UserProfile>(`${environment.apiUrl}/profiles/${this.jwtPayload?.userId}`,this.profileForm.value).subscribe({
-        next: (data) => {
-          console.log(data);
-          
-        },
-        error: (error) => {
-          console.error('Error al obtener el perfil:', error);
-          alert('Hubo un problema al cargar los datos del perfil. Por favor, intenta de nuevo más tarde.');
-        },
-      });
+      this.http
+        .put<UserProfile>(
+          `${environment.apiUrl}/profiles/${this.userId}`,
+          this.profileForm.value
+        )
+        .subscribe({
+          next: (data) => {
+            console.log(data);
+          },
+          error: (error) => {
+            console.error('Error al obtener el perfil:', error);
+            alert(
+              'Hubo un problema al cargar los datos del perfil. Por favor, intenta de nuevo más tarde.'
+            );
+          },
+        });
 
       this.isEditing = false;
     } else {
