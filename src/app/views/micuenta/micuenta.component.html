@@ -1,88 +1,140 @@
 <div class="container mt-4">
-    <div class="card shadow">
-      <div class="card-header text-center bg-primary text-white">
-        <h2>Mi Cuenta</h2>
+  <div class="card shadow">
+    <div class="card-header text-center bg-primary text-white">
+      <h2>Mi Cuenta</h2>
+    </div>
+    <div class="card-body">
+      <!-- Vista normal -->
+      <div *ngIf="!isEditing">
+        <div class="d-flex flex-column align-items-center">
+          <img
+            [src]="profileImageUrl || 'https://via.placeholder.com/150'"
+            class="rounded-circle mb-3"
+            alt="Foto de perfil"
+          />
+          <h4 class="text-primary">{{ profileForm.get("name")?.value }}</h4>
+          <p class="text-muted">{{ profileForm.get("email")?.value }}</p>
+          <p>{{ profileForm.get("phone")?.value }}</p>
+          <p>{{ profileForm.get("address")?.value }}</p>
+        </div>
+        <div class="text-center mt-3">
+          <button class="btn btn-warning" (click)="toggleEdit()">Editar</button>
+        </div>
+        <div class="text-center mt-3">
+          <button class="btn btn-danger" (click)="onLogout()">
+            Cerrar Sesión
+          </button>
+        </div>
       </div>
-      <div class="card-body">
-        <!-- Vista normal -->
-        <div *ngIf="!isEditing">
-          <div class="d-flex flex-column align-items-center">
-            <img
-              src="https://via.placeholder.com/150"
-              class="rounded-circle mb-3"
-              alt="Foto de perfil"
+
+      <!-- Modo de edición -->
+      <div *ngIf="isEditing">
+        <form [formGroup]="profileForm" (ngSubmit)="saveChanges()">
+          <div class="mb-3">
+            <label for="profileImage" class="form-label">Foto de perfil</label>
+            <input
+              type="file"
+              id="profileImage"
+              (change)="onFileSelected($event)"
+              class="form-control"
             />
-            <h4 class="text-primary">{{ profileForm.get('name')?.value }}</h4>
-            <p class="text-muted">{{ profileForm.get('email')?.value }}</p>
-            <p>{{ profileForm.get('phone')?.value }}</p>
-            <p>{{ profileForm.get('address')?.value }}</p>
+            <div class="mt-3" *ngIf="profileImageUrl">
+              <img
+                [src]="profileImageUrl"
+                class="rounded-circle"
+                alt="Vista previa de la foto de perfil"
+                width="150"
+                height="150"
+              />
+            </div>
           </div>
-          <div class="text-center mt-3">
-            <button class="btn btn-warning" (click)="toggleEdit()">Editar</button>
+          <div class="mb-3">
+            <label for="name" class="form-label">Nombre completo</label>
+            <input
+              type="text"
+              id="name"
+              formControlName="name"
+              class="form-control"
+            />
+            <div
+              *ngIf="
+                profileForm.get('name')?.invalid &&
+                profileForm.get('name')?.touched
+              "
+              class="text-danger"
+            >
+              Nombre es requerido (mínimo 3 caracteres).
+            </div>
           </div>
-          <div class="text-center mt-3">
-            <button class="btn btn-danger" (click)="onLogout()">Cerrar Sesión</button>
+          <div class="mb-3">
+            <label for="email" class="form-label">Correo electrónico</label>
+            <input
+              type="email"
+              id="email"
+              formControlName="email"
+              class="form-control"
+            />
+            <div
+              *ngIf="
+                profileForm.get('email')?.invalid &&
+                profileForm.get('email')?.touched
+              "
+              class="text-danger"
+            >
+              Debe ingresar un correo válido.
+            </div>
           </div>
-        </div>
-  
-        <!-- Modo de edición -->
-        <div *ngIf="isEditing">
-          <form [formGroup]="profileForm" (ngSubmit)="saveChanges()">
-            <div class="mb-3">
-              <label for="name" class="form-label">Nombre completo</label>
-              <input
-                type="text"
-                id="name"
-                formControlName="name"
-                class="form-control"
-              />
-              <div *ngIf="profileForm.get('name')?.invalid && profileForm.get('name')?.touched" class="text-danger">
-                Nombre es requerido (mínimo 3 caracteres).
-              </div>
+          <div class="mb-3">
+            <label for="phone" class="form-label">Teléfono</label>
+            <input
+              type="text"
+              id="phone"
+              formControlName="phone"
+              class="form-control"
+            />
+            <div
+              *ngIf="
+                profileForm.get('phone')?.invalid &&
+                profileForm.get('phone')?.touched
+              "
+              class="text-danger"
+            >
+              Ingrese un número válido.
             </div>
-            <div class="mb-3">
-              <label for="email" class="form-label">Correo electrónico</label>
-              <input
-                type="email"
-                id="email"
-                formControlName="email"
-                class="form-control"
-              />
-              <div *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched" class="text-danger">
-                Debe ingresar un correo válido.
-              </div>
+          </div>
+          <div class="mb-3">
+            <label for="address" class="form-label">Direccion</label>
+            <input
+              type="text"
+              id="address"
+              formControlName="address"
+              class="form-control"
+            />
+            <div
+              *ngIf="profileForm.get('address')?.invalid"
+              class="text-danger"
+            >
+              Ingrese una direccion.
             </div>
-            <div class="mb-3">
-              <label for="phone" class="form-label">Teléfono</label>
-              <input
-                type="text"
-                id="phone"
-                formControlName="phone"
-                class="form-control"
-              />
-              <div *ngIf="profileForm.get('phone')?.invalid && profileForm.get('phone')?.touched" class="text-danger">
-                Ingrese un número válido.
-              </div>
-            </div>
-            <div class="mb-3">
-              <label for="address" class="form-label">Direccion</label>
-              <input
-                type="text"
-                id="address"
-                formControlName="address"
-                class="form-control"
-              />
-              <div *ngIf="profileForm.get('address')?.invalid" class="text-danger">
-                Ingrese una direccion.
-              </div>
-            </div>
-            <div class="d-flex justify-content-between">
-              <button type="submit" class="btn btn-success" [disabled]="profileForm.invalid">Guardar</button>
-              <button type="button" class="btn btn-secondary" (click)="toggleEdit()">Cancelar</button>
-            </div>
-          </form>
-        </div>
+          </div>
+          <div class="d-flex justify-content-between">
+            <button
+              type="submit"
+              class="btn btn-success"
+              [disabled]="profileForm.invalid"
+            >
+              Guardar
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="toggleEdit()"
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
-  
+</div>

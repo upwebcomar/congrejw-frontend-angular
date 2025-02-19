@@ -10,7 +10,7 @@ import {
 } from '@angular/forms';
 import { AppStateService } from '../../services/app-state.service';
 import { UserProfile } from './user-profile.interface';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { JwtPayload } from '../../auth/jwt-payload.interface';
@@ -48,6 +48,7 @@ export class MicuentaComponent implements OnInit {
   profileForm: FormGroup;
   isEditing = false;
   userId!: number;
+  profileImageUrl: string = '/assets/images/placeholder-profile-600x600.jpg';
   private context = 'MicuentaComponent';
 
   constructor(
@@ -62,6 +63,7 @@ export class MicuentaComponent implements OnInit {
     const initialProfile: UserProfile = {
       name: '',
       email: '',
+      image: '',
       phone: '',
       address: '',
       profile: '',
@@ -94,7 +96,31 @@ export class MicuentaComponent implements OnInit {
         .subscribe({
           next: (data) => {
             this.logger.log(this.context, 'data', data);
-            this.profileForm.patchValue(data.profile); // Se espera que `data` tenga las mismas claves que el formulario
+            this.profileForm.patchValue(data.profile);
+
+            const headers = new HttpHeaders().set(
+              'Authorization',
+              `Bearer ${this.authService.getToken()}`
+            );
+            this.http
+              .get(
+                environment.apiUrl +
+                  '/files/image-profile/' +
+                  data.profile.image,
+                {
+                  headers,
+                  responseType: 'blob',
+                }
+              )
+              .subscribe({
+                next: (imageBlob) => {
+                  this.profileImageUrl = URL.createObjectURL(imageBlob); // Crear una URL a partir del blob
+                  console.log(this.profileImageUrl); // Ahora se ejecuta después de obtener la imagen
+                },
+                error: (error) => {
+                  console.error('Error al obtener la imagen:', error);
+                },
+              });
           },
           error: (error) => {
             console.error('Error al obtener el Usuario:', error);
@@ -130,6 +156,7 @@ export class MicuentaComponent implements OnInit {
       alert('Por favor corrige los errores antes de guardar.');
     }
   }
+  onFileSelected(e: Event) {}
 
   onLogout(): void {
     this.authService.logout();
