@@ -1,18 +1,24 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { LoggerService } from '../../services/logger.service';
 import { environment } from '../../../environments/environment';
 import { GruposServiciodelcampo } from './grupos-serviciodelcampo.interface';
 import { CommonModule } from '@angular/common';
 import { PdfPreviewV2Component } from '../../components/pdf-preview-v2/pdf-preview.component';
+import { RoleService } from '../../auth/roles/role.service';
 
 @Component({
   selector: 'app-gruposServiciodelcampo',
   standalone: true,
   templateUrl: './grupos-serviciodelcampo.component.html',
-  imports: [CommonModule,PdfPreviewV2Component,ReactiveFormsModule]
+  imports: [CommonModule, PdfPreviewV2Component, ReactiveFormsModule],
 })
 export class gruposServiciodelcampoComponent implements OnInit {
   context: string = 'gruposServiciodelcampoComponent';
@@ -31,12 +37,12 @@ export class gruposServiciodelcampoComponent implements OnInit {
     private logger: LoggerService,
     private http: HttpClient,
     private fb: FormBuilder,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private rolesService: RoleService
   ) {
     this.zoom = 1;
     this.page = 1;
     this.showAll = true;
-    
   }
 
   ngOnInit(): void {
@@ -57,7 +63,11 @@ export class gruposServiciodelcampoComponent implements OnInit {
       next: (data) => {
         this.pdfGrupos = data[0];
         this.pdfSrc = this.basePdf + this.pdfGrupos.pathfile;
-        this.logger.log(this.context, 'Carga de Grupos Servicio del Campo desde servidor', this.pdfGrupos);
+        this.logger.log(
+          this.context,
+          'Carga de Grupos Servicio del Campo desde servidor',
+          this.pdfGrupos
+        );
         this.logger.log(this.context, 'pdfSrc', this.pdfSrc);
 
         // Actualiza el formulario con los datos del grupo
@@ -78,15 +88,29 @@ export class gruposServiciodelcampoComponent implements OnInit {
   guardarCambios(): void {
     if (this.editForm.valid && this.pdfGrupos) {
       const updatedData = { ...this.pdfGrupos, ...this.editForm.value };
-      this.http.put(`${this.baseEndpoint}${this.pdfGrupos.id}`, updatedData).subscribe({
-        next: (response) => {
-          this.logger.log(this.context, 'Pathfile actualizado con éxito:', response);
-          this.pdfSrc = this.basePdf + updatedData.pathfile;
-        },
-        error: (err) => {
-          this.logger.error(this.context, 'Error al actualizar Pathfile:', err);
-        },
-      });
+      this.http
+        .put(`${this.baseEndpoint}${this.pdfGrupos.id}`, updatedData)
+        .subscribe({
+          next: (response) => {
+            this.logger.log(
+              this.context,
+              'Pathfile actualizado con éxito:',
+              response
+            );
+            this.pdfSrc = this.basePdf + updatedData.pathfile;
+          },
+          error: (err) => {
+            this.logger.error(
+              this.context,
+              'Error al actualizar Pathfile:',
+              err
+            );
+          },
+        });
     }
+  }
+  // Métodos para verificar los roles permitidos
+  isTieneRolPermitido(accion: string[]): boolean {
+    return this.rolesService.hasAnyRole(accion);
   }
 }

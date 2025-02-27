@@ -1,38 +1,82 @@
 <div class="container">
   <!-- Componente PDF Viewer -->
-  <app-pdf-preview-v2 *ngIf="pdfSrc" [pdfSrc]="pdfSrc" [zoom]="zoom" [page]="page"></app-pdf-preview-v2>
+  <app-pdf-preview-v2
+    *ngIf="pdfSrc"
+    [pdfSrc]="pdfSrc"
+    [zoom]="zoom"
+    [page]="page"
+  ></app-pdf-preview-v2>
   <p *ngIf="!pdfSrc">No se encontró el archivo PDF</p>
 
-
   <!-- Botón para abrir el modal -->
-  <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#editPathfileModal">
+  <button
+    class="btn btn-primary mt-3"
+    data-bs-toggle="modal"
+    data-bs-target="#editPathfileModal"
+    *ngIf="isTieneRolPermitido(['elder'])"
+  >
     Editar Pathfile
   </button>
 
   <!-- Modal de edición -->
-  <div class="modal fade" id="editPathfileModal" tabindex="-1" aria-labelledby="editPathfileModalLabel"
-    aria-hidden="true">
+  <div
+    class="modal fade"
+    id="editPathfileModal"
+    tabindex="-1"
+    aria-labelledby="editPathfileModalLabel"
+    aria-hidden="true"
+  >
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="editPathfileModalLabel">Editar Pathfile</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h5 class="modal-title" id="editPathfileModalLabel">
+            Editar Pathfile
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
         </div>
         <div class="modal-body">
           <form [formGroup]="editForm">
             <div class="mb-3">
               <label for="pathfileInput" class="form-label">Pathfile</label>
-              <input type="text" class="form-control" id="pathfileInput" formControlName="pathfile" required />
-              <div *ngIf="editForm.get('pathfile')?.invalid && editForm.get('pathfile')?.touched" class="text-danger">
+              <input
+                type="text"
+                class="form-control"
+                id="pathfileInput"
+                formControlName="pathfile"
+                required
+              />
+              <div
+                *ngIf="
+                  editForm.get('pathfile')?.invalid &&
+                  editForm.get('pathfile')?.touched
+                "
+                class="text-danger"
+              >
                 Pathfile es obligatorio
               </div>
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" [disabled]="editForm.invalid" (click)="guardarCambios()"
-            data-bs-dismiss="modal">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            [disabled]="editForm.invalid"
+            (click)="guardarCambios()"
+            data-bs-dismiss="modal"
+          >
             Guardar cambios
           </button>
         </div>

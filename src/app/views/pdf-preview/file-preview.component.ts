@@ -22,6 +22,7 @@ export class FilePreviewComponent implements OnInit {
   page: number = 1; // Página inicial
   showAll: boolean = false; // Mostrar todas las páginas o una sola
   imageUrl!: SafeUrl;
+  loadingImage: boolean = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -107,5 +108,9 @@ export class FilePreviewComponent implements OnInit {
         console.error('Error al cargar la imagen', error);
       },
     });
+  }
+  onImageError(): void {
+    this.loadingImage = false; // Ocultar el spinner en caso de error
+    this.imageUrl = '/assets/images/placeholder-loadImageError.jpg'; // Imagen de respaldo
   }
 }

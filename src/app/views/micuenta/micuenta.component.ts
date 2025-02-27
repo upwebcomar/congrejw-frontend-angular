@@ -15,6 +15,7 @@ import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { JwtPayload } from '../../auth/jwt-payload.interface';
 import { LoggerService } from '../../services/logger.service';
+import { FileService } from '../files/files.service';
 
 @Component({
   selector: 'app-micuenta',
@@ -49,10 +50,16 @@ export class MicuentaComponent implements OnInit {
   isEditing = false;
   userId!: number;
   profileImageUrl: string = '/assets/images/placeholder-profile-600x600.jpg';
+  profileImageUrlBefore: string =
+    '/assets/images/placeholder-profile-600x600.jpg';
   private context = 'MicuentaComponent';
+  selectedFile: File | null = null;
+  inputFileChange: boolean = false;
+  loadingImage: boolean = true;
 
   constructor(
     private authService: AuthService,
+    private fileService: FileService,
     private router: Router,
     private appState: AppStateService,
     private fb: FormBuilder,
@@ -75,6 +82,8 @@ export class MicuentaComponent implements OnInit {
         [Validators.required, Validators.minLength(3)],
       ],
       email: [initialProfile.email, [Validators.required, Validators.email]],
+      image: [initialProfile.image],
+
       phone: [
         initialProfile.phone,
         [Validators.required, Validators.pattern(/^\+?\d[\d\s\-]+$/)],
@@ -87,6 +96,11 @@ export class MicuentaComponent implements OnInit {
   }
   toggleEdit() {
     this.isEditing = !this.isEditing;
+    this.profileImageUrlBefore = this.profileImageUrl;
+  }
+  editCancel() {
+    this.isEditing = !this.isEditing;
+    this.profileImageUrl = this.profileImageUrlBefore;
   }
 
   getUser() {
@@ -115,7 +129,6 @@ export class MicuentaComponent implements OnInit {
               .subscribe({
                 next: (imageBlob) => {
                   this.profileImageUrl = URL.createObjectURL(imageBlob); // Crear una URL a partir del blob
-                  console.log(this.profileImageUrl); // Ahora se ejecuta después de obtener la imagen
                 },
                 error: (error) => {
                   console.error('Error al obtener la imagen:', error);
@@ -132,32 +145,96 @@ export class MicuentaComponent implements OnInit {
     }
   }
 
-  saveChanges() {
-    if (this.profileForm.valid) {
+  async saveChanges(): Promise<void> {
+    if (!this.profileForm.valid) {
+      alert('Por favor corrige los errores antes de guardar.');
+      return;
+    }
+
+    const fileUploadPromise = this.inputFileChange
+      ? this.uploadFile().then((fileName) => {
+          console.log('File uploaded successfully!');
+          this.profileForm.patchValue({ image: fileName });
+        })
+      : Promise.resolve(); // Si no cambia el archivo, no hace nada y sigue con el flujo
+
+    try {
+      await fileUploadPromise;
+      await this.saveProfile(); // Guardar el perfil después de subir el archivo (o directamente si no hubo subida)
+
+      console.log('Profile saved successfully!');
+      this.isEditing = false;
+      this.inputFileChange = false;
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Hubo un problema. Por favor, intenta de nuevo más tarde.');
+    }
+  }
+
+  saveProfile(): Promise<void> {
+    return new Promise((resolve, reject) => {
       this.http
         .put<UserProfile>(
           `${environment.apiUrl}/profiles/${this.userId}`,
           this.profileForm.value
         )
         .subscribe({
-          next: (data) => {
-            console.log(data);
-          },
-          error: (error) => {
-            console.error('Error al obtener el perfil:', error);
-            alert(
-              'Hubo un problema al cargar los datos del perfil. Por favor, intenta de nuevo más tarde.'
-            );
-          },
+          next: () => resolve(),
+          error: (error) => reject(error),
+        });
+    });
+  }
+
+  uploadFile(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      if (this.selectedFile) {
+        const formData = new FormData();
+
+        // Obtener la extensión original del archivo
+        const fileExtension = this.selectedFile.name.split('.').pop();
+        const newFileName = `${this.authService.getUserId()}.${fileExtension}`;
+
+        // Crear un nuevo archivo con el contenido original y el nombre deseado
+        const renamedFile = new File([this.selectedFile], newFileName, {
+          type: this.selectedFile.type,
         });
 
-      this.isEditing = false;
-    } else {
-      alert('Por favor corrige los errores antes de guardar.');
-    }
-  }
-  onFileSelected(e: Event) {}
+        formData.append('file', renamedFile);
 
+        this.fileService
+          .uploadFile(formData, environment.apiUrl + '/files/image-profile')
+          .subscribe({
+            next: () => resolve(newFileName),
+            error: (err) => reject(err),
+          });
+      } else {
+        resolve(''); // Si no hay archivo seleccionado, simplemente resolvemos
+      }
+    });
+  }
+
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      // Crea una copia del archivo usando el constructor File
+      this.profileImageUrlBefore = this.profileImageUrl;
+    }
+    this.selectedFile = file;
+
+    if (this.selectedFile) {
+      this.profileImageUrl = URL.createObjectURL(this.selectedFile);
+    }
+    this.inputFileChange = true;
+  }
+
+  private handleError(error: any, userMessage: string): void {
+    this.logger.error(this.context, error.message || 'Unknown Error', error);
+    alert(userMessage);
+  }
+  onImageError(): void {
+    this.loadingImage = false; // Ocultar el spinner si hay un error
+    this.profileImageUrl = '/assets/images/placeholder-profile-600x600.jpg';
+  }
   onLogout(): void {
     this.authService.logout();
     this.appState.setLoggedState(false);

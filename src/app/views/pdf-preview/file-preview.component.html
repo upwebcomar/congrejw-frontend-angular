@@ -1,6 +1,4 @@
 <div class="container text-center w-100 mx-auto">
-  <p>Usa <strong>Ctrl + Scroll</strong> o los botones para hacer zoom</p>
-
   <!-- Botones de zoom -->
   <div class="d-flex justify-content-center gap-2 my-2">
     <button class="btn btn-primary" (click)="decreaseZoom()">-</button>
@@ -19,12 +17,22 @@
     >
     </app-pdf-viewer>
 
-    <img
-      *ngSwitchCase="'image'"
-      [src]="imageUrl"
-      [style.width.%]="zoom * 90"
-      alt="Vista previa de la imagen"
-    />
+    <!-- Imagen con spinner -->
+    <div class="position-relative d-inline-block" *ngSwitchCase="'image'">
+      <div
+        *ngIf="loadingImage"
+        class="spinner-border text-primary"
+        role="status"
+      ></div>
+      <img
+        [src]="imageUrl"
+        [style.width.%]="zoom * 90"
+        alt="Vista previa de la imagen"
+        [hidden]="loadingImage"
+        (load)="loadingImage = false"
+        (error)="onImageError()"
+      />
+    </div>
 
     <p *ngSwitchDefault>Tipo de archivo no soportado.</p>
   </ng-container>
