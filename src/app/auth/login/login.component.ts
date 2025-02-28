@@ -11,11 +11,10 @@ import { LoggerService } from '../../services/logger.service';
 
 
 @Component({
-  selector: 'app-login',
-  standalone:true,
-  imports:[ReactiveFormsModule,CommonModule,RouterModule],
-  templateUrl: './login.component.html',
-  styles: [''],
+    selector: 'app-login',
+    imports: [ReactiveFormsModule, CommonModule, RouterModule],
+    templateUrl: './login.component.html',
+    styles: ['']
 })
 export class LoginComponent {
   loginForm: FormGroup;

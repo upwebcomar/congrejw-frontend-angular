@@ -5,11 +5,10 @@ import { PdfViewerComponent } from '../../components/pdf-viewer/pdf-viewer.compo
 import { LoggerService } from '../../services/logger.service';
 
 @Component({
-  selector: 'app-pdf-preview-v2',
-  standalone: true,
-  imports: [CommonModule, PdfViewerComponent],
-  templateUrl: './pdf-preview.component.html',
-  styles: ``,
+    selector: 'app-pdf-preview-v2',
+    imports: [CommonModule, PdfViewerComponent],
+    templateUrl: './pdf-preview.component.html',
+    styles: ``
 })
 export class PdfPreviewV2Component implements OnInit {
   @Input () context: string = 'PdfPreviewComponent';

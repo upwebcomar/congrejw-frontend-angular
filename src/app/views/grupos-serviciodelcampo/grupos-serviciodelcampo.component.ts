@@ -15,10 +15,9 @@ import { PdfPreviewV2Component } from '../../components/pdf-preview-v2/pdf-previ
 import { RoleService } from '../../auth/roles/role.service';
 
 @Component({
-  selector: 'app-gruposServiciodelcampo',
-  standalone: true,
-  templateUrl: './grupos-serviciodelcampo.component.html',
-  imports: [CommonModule, PdfPreviewV2Component, ReactiveFormsModule],
+    selector: 'app-gruposServiciodelcampo',
+    templateUrl: './grupos-serviciodelcampo.component.html',
+    imports: [CommonModule, PdfPreviewV2Component, ReactiveFormsModule]
 })
 export class gruposServiciodelcampoComponent implements OnInit {
   context: string = 'gruposServiciodelcampoComponent';

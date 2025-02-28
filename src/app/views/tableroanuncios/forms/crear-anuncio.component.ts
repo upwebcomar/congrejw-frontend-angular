@@ -7,10 +7,9 @@ import { LoggerService } from '../../../services/logger.service';
 import { environment } from '../../../../environments/environment';
 
 @Component({
-  selector: 'app-crear-anuncio',
-  standalone:true,
-  imports:[CommonModule,ReactiveFormsModule],
-  templateUrl: './crear-anuncio.component.html',
+    selector: 'app-crear-anuncio',
+    imports: [CommonModule, ReactiveFormsModule],
+    templateUrl: './crear-anuncio.component.html'
 })
 export class CrearAnuncioComponent {
   anuncioForm: FormGroup;

@@ -1,38 +1,40 @@
-import { AfterViewInit, Component, ViewChild, ViewContainerRef } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { DashboardComponentService } from './dasboard-component.service';
 import { CommonModule } from '@angular/common';
-import { UsersComponent } from './views/users/users.component';
 import { SidebarService } from './sidebar/sidebar.service';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
-  standalone: true,
-  imports: [RouterModule,SidebarComponent,CommonModule,UsersComponent],
+  imports: [RouterModule, SidebarComponent, CommonModule],
   templateUrl: './dashboard.component.html',
-  styleUrl:'./dashboard.component.css'
+  styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent implements AfterViewInit {
-  @ViewChild('dashboardContainer', { read: ViewContainerRef }) container!: ViewContainerRef;
-    sidebarItem$:BehaviorSubject<string>;
-  
+  @ViewChild('dashboardContainer', { read: ViewContainerRef })
+  container!: ViewContainerRef;
+  sidebarItem$: BehaviorSubject<string>;
 
   constructor(
     private widgetRegistry: DashboardComponentService,
-    private sidebarService:SidebarService
+    private sidebarService: SidebarService
   ) {
-    this.sidebarItem$ = this.sidebarService.getSidebarItem()
-
+    this.sidebarItem$ = this.sidebarService.getSidebarItem();
   }
 
   ngAfterViewInit(): void {
-    this.sidebarItem$.subscribe({next:data => {
-      this.loadWidget(data);
-      }
-    })
-    
+    this.sidebarItem$.subscribe({
+      next: (data) => {
+        this.loadWidget(data);
+      },
+    });
   }
 
   loadWidget(widgetName: string): void {

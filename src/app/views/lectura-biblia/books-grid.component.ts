@@ -7,11 +7,10 @@ import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { GetBooksProgressDto } from './dto/getBooksProgress.dto';
 @Component({
-  selector: 'app-books-grid',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './books-grid.component.html',
-  styleUrls: ['./books-grid.component.css'],
+    selector: 'app-books-grid',
+    imports: [CommonModule],
+    templateUrl: './books-grid.component.html',
+    styleUrls: ['./books-grid.component.css']
 })
 export class BooksGridComponent implements OnInit {
   books: Book[] = [];

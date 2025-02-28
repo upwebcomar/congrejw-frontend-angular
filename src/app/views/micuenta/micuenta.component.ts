@@ -18,12 +18,11 @@ import { LoggerService } from '../../services/logger.service';
 import { FileService } from '../files/files.service';
 
 @Component({
-  selector: 'app-micuenta',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './micuenta.component.html',
-  styles: [
-    `
+    selector: 'app-micuenta',
+    imports: [CommonModule, ReactiveFormsModule],
+    templateUrl: './micuenta.component.html',
+    styles: [
+        `
       .card {
         max-width: 400px;
         margin: auto;
@@ -43,7 +42,7 @@ import { FileService } from '../files/files.service';
         min-width: 100px;
       }
     `,
-  ],
+    ]
 })
 export class MicuentaComponent implements OnInit {
   profileForm: FormGroup;

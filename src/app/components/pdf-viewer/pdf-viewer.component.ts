@@ -7,11 +7,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { PdfService } from './pdf.service';
 
 @Component({
-  selector: 'app-pdf-viewer',
-  standalone: true,
-  imports: [CommonModule, PdfViewerModule],
-  templateUrl: './pdf-viewer.component.html',
-  styleUrls: ['./pdf-viewer.component.css'],
+    selector: 'app-pdf-viewer',
+    imports: [CommonModule, PdfViewerModule],
+    templateUrl: './pdf-viewer.component.html',
+    styleUrls: ['./pdf-viewer.component.css']
 })
 export class PdfViewerComponent {
   @Input() pdfSrc!: string; // Ruta del PDF

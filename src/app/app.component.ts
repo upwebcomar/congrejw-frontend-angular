@@ -5,11 +5,10 @@ import { environment } from '../environments/environment';
 import { Title } from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet,NavbarComponent],
-  templateUrl: './app.component.html',
-  styles:``
+    selector: 'app-root',
+    imports: [RouterOutlet, NavbarComponent],
+    templateUrl: './app.component.html',
+    styles: ``
 })
 export class AppComponent implements OnInit {
   constructor(private title:Title){}

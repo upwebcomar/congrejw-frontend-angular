@@ -4,11 +4,10 @@ import { CommonModule } from '@angular/common';
 import { LoggerService } from '../../services/logger.service';
 
 @Component({
-  selector: 'app-files-manager',
-  imports: [CommonModule],
-  standalone: true,
-  templateUrl: './files-manager.component.html',
-  styles: '',
+    selector: 'app-files-manager',
+    imports: [CommonModule],
+    templateUrl: './files-manager.component.html',
+    styles: ''
 })
 export class FilesManagerComponent implements OnInit {
   files: string[] = [];

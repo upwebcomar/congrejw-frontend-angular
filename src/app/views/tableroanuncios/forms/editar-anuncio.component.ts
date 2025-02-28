@@ -14,10 +14,9 @@ type TableroAnunciosForm = {
 }; 
 
 @Component({
-  selector: 'app-editar-anuncio',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './editar-anuncio.component.html',
+    selector: 'app-editar-anuncio',
+    imports: [CommonModule, ReactiveFormsModule],
+    templateUrl: './editar-anuncio.component.html'
 })
 export class EditarAnuncioComponent implements OnInit {
   anuncioForm!: FormGroup;

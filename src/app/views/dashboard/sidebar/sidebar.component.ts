@@ -5,11 +5,10 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { SidebarService } from './sidebar.service';
 
 @Component({
-  selector: 'app-sidebar',
-  standalone: true,
-  imports:[CommonModule, RouterModule],
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.css']
+    selector: 'app-sidebar',
+    imports: [CommonModule, RouterModule],
+    templateUrl: './sidebar.component.html',
+    styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit {
   isCollapsed = true;

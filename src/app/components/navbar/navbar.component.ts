@@ -21,11 +21,10 @@ import { NotificationService } from '../../services/notifications/notification.s
 import { Notification } from '../../views/notifications/notification.interface';
 
 @Component({
-  selector: 'app-navbar',
-  standalone: true,
-  imports: [RouterModule, CommonModule, NotificationComponent],
-  templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.css',
+    selector: 'app-navbar',
+    imports: [RouterModule, CommonModule, NotificationComponent],
+    templateUrl: './navbar.component.html',
+    styleUrl: './navbar.component.css'
 })
 export class NavbarComponent implements AfterViewInit, OnDestroy {
   @ViewChild('login') login!: ElementRef<HTMLAnchorElement>;

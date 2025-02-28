@@ -8,11 +8,10 @@ import { AuthService } from '../../auth/auth.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-file-preview',
-  standalone: true,
-  imports: [CommonModule, PdfViewerComponent],
-  templateUrl: './file-preview.component.html',
-  styles: [],
+    selector: 'app-file-preview',
+    imports: [CommonModule, PdfViewerComponent],
+    templateUrl: './file-preview.component.html',
+    styles: []
 })
 export class FilePreviewComponent implements OnInit {
   context: string = 'FilePreviewComponent';

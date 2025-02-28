@@ -10,11 +10,10 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @Component({
-  selector: 'app-anuncios',
-  standalone: true,
-  imports: [CommonModule, RouterModule, DragDropModule],
-  templateUrl: './tableroanuncios.component.html',
-  styles: '',
+    selector: 'app-anuncios',
+    imports: [CommonModule, RouterModule, DragDropModule],
+    templateUrl: './tableroanuncios.component.html',
+    styles: ''
 })
 export class TableroanunciosComponent implements OnInit {
   anuncios: TableroAnuncios[] = [];

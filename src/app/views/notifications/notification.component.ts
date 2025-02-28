@@ -4,11 +4,10 @@ import { CommonModule } from '@angular/common';
 import { Notification } from './notification.interface';
 
 @Component({
-  selector: 'app-notifications',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './notification.component.html',
-  styles: [`
+    selector: 'app-notifications',
+    imports: [CommonModule],
+    templateUrl: './notification.component.html',
+    styles: [`
     .toast {
       margin-bottom: 10px;
       opacity: 0.95;

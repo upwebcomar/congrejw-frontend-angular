@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'App-Modal',
-  templateUrl:'./modal.component.html',
-  styles:``
+    selector: 'App-Modal',
+    templateUrl: './modal.component.html',
+    styles: ``,
+    standalone: false
 })
 export class ModalComponent {
   closeResult: string = '';

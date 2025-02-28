@@ -5,11 +5,10 @@ import { environment } from '../../../environments/environment';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  imports:[CommonModule],
-  selector: 'app-admin',
-  standalone:true,
-  templateUrl: './admin.component.html',
-  styles:''
+    imports: [CommonModule],
+    selector: 'app-admin',
+    templateUrl: './admin.component.html',
+    styles: ''
 })
 export class AdminComponent {
   loading = false;

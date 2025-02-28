@@ -9,10 +9,9 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  imports: [CommonModule, FormsModule],
-  standalone: true,
-  selector: 'dashboard-users',
-  templateUrl: './users.component.html',
+    imports: [CommonModule, FormsModule],
+    selector: 'dashboard-users',
+    templateUrl: './users.component.html'
 })
 export class UsersComponent implements OnInit {
   users!: AllUserDto[];

@@ -27,11 +27,10 @@ interface Notification {
 }
 
 @Component({
-  selector: 'app-send-notification',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './notifications.component.html',
-  styles: [],
+    selector: 'app-send-notification',
+    imports: [CommonModule, ReactiveFormsModule],
+    templateUrl: './notifications.component.html',
+    styles: []
 })
 export class SendNotificationComponent {
   notificationForm: FormGroup;

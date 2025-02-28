@@ -6,12 +6,11 @@ import { Router } from '@angular/router';
 import { LoggerService } from '../../services/logger.service';
 
 @Component({
-  selector: 'app-register',
-  standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],  // Importaciones necesarias para un componente standalone
-  providers: [AuthService,LoggerService],
-  templateUrl: './register.component.html',
-  styles: ''
+    selector: 'app-register',
+    imports: [ReactiveFormsModule, CommonModule], // Importaciones necesarias para un componente standalone
+    providers: [AuthService, LoggerService],
+    templateUrl: './register.component.html',
+    styles: ''
 })
 export class RegisterComponent implements OnInit {
 
