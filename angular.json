@@ -22,10 +22,7 @@
             "outputPath": "dist/congrejw",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js",
-              "@angular/localize/init"
-            ],
+            "polyfills": ["zone.js", "@angular/localize/init"],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
@@ -40,10 +37,14 @@
               },
               {
                 "glob": "manifest.webmanifest",
-                "input": "src", 
-                "output": "/" 
+                "input": "src",
+                "output": "/"
+              },
+              {
+                "glob": "workbox-custom-sw.js",
+                "input": "src",
+                "output": "/"
               }
- 
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
@@ -73,7 +74,6 @@
                 }
               ],
               "outputHashing": "all"
-            
             },
             "development": {
               "optimization": false,
@@ -113,9 +113,7 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.css"
-            ],
+            "styles": ["src/styles.css"],
             "scripts": []
           }
         }

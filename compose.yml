@@ -1,0 +1,22 @@
+services:
+  congrejw-angular:
+    image: upwebcomar/congrejw-angular:latest
+    container_name: congrejw-angular
+    restart: always
+    ports:
+      - 4000:80
+    environment:
+      - VIRTUAL_HOST=congrejw.upweb.com.ar
+      - LETSENCRYPT_HOST=congrejw.upweb.com.ar
+      - LETSENCRYPT_EMAIL=freedomotica@gmail.com
+      - API_URL=http://localhost:3000
+      - APP_NAME=Congrejw
+      - ALLOWED_DOMAINS=http://localhost
+      - DISALLOWED_ROUTES=http://localhost/auth/login
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
+    name: my_network

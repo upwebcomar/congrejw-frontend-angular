@@ -7,7 +7,8 @@ WORKDIR /app
 COPY package*.json ./
 
 # Instalar las dependencias
-RUN npm install
+RUN npm install --force or --legacy-peer-deps
+
 
 # Copiar el código de la aplicación Angular al contenedor
 COPY . .
@@ -16,7 +17,7 @@ COPY . .
 RUN npm run build -- --configuration production
 
 # Generar el Service Worker con Workbox (opcional)
-RUN npx workbox generateSW workbox-config.js
+RUN npx workbox injectManifest workbox-config.js
 
 # Etapa 2: Servir la aplicación con un servidor web
 FROM nginx:alpine
