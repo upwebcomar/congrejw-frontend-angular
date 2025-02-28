@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { LoggerService } from '../../services/logger.service';
+import { GetBooksProgressDto } from './dto/getBooksProgress.dto';
 
 export interface Book {
   id: number;
@@ -14,8 +16,9 @@ export interface Book {
 export class BibleStateService {
   private books$ = new BehaviorSubject<Book[]>([]); // Emite los libros
   bookSubject = new BehaviorSubject<Book | null>(null); // Emite cambios en un libro específico
+  private context = 'BibleStateService';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private logger: LoggerService) {}
 
   // Obtener todos los libros
   getBooks() {
@@ -23,12 +26,8 @@ export class BibleStateService {
   }
 
   // Cargar libros (simulación)
-  loadBooks() {
-    this.http
-      .get<Book[]>('/assets/mocks/books-mock.json') // Ruta mock de los libros
-      .subscribe((books) => {
-        this.books$.next(books); // Emitir los libros cargados
-      });
+  loadBooksMock() {
+    return this.http.get<Book[]>('/assets/mocks/books-mock.json'); // Ruta mock de los libros
   }
 
   // Actualizar el libro específico en el comportamiento observable
@@ -46,10 +45,34 @@ export class BibleStateService {
         error: (error) => console.log('Error en la petición:', error),
       });
   }
-  // Obtener capítulos leídos de un libro por el usuario
+  /**
+   *  Obtener capítulos leídos de un libro por el usuario
+   * @param name
+   * @param userId
+   * @returns number[]
+   */
+
   getReadChapter(name: string, userId: number) {
     return this.http.get<number[]>(
       `${environment.apiUrl}/bible/books/${name}/user/${userId}/read-chapters`
     );
+  }
+  /**
+   * Obtener progreso de lectura (total de capítulos leídos por libro)
+   * @param userId
+   * @returns GetBooksProgressDto[]
+   */
+
+  getBooksProgress(userId: number): Observable<GetBooksProgressDto[]> {
+    return this.http
+      .get<GetBooksProgressDto[]>(
+        `${environment.apiUrl}/bible/books/user/progress/${userId}`
+      )
+      .pipe(
+        catchError((error) => {
+          console.error('Error obteniendo progreso:', error);
+          return throwError(() => error);
+        })
+      );
   }
 }

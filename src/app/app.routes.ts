@@ -19,6 +19,7 @@ import { MicuentaComponent } from './views/micuenta/micuenta.component';
 import { ConfiguracionComponent } from './views/configuracion/configuracion.component';
 import { NotificationComponent } from './views/notifications/notification.component';
 import { BooksGridComponent } from './views/lectura-biblia/books-grid.component';
+import { ChatWebsocketComponent } from './components/chatwebsocket/chat-websocket.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -99,6 +100,11 @@ export const routes: Routes = [
     component: AdminComponent,
     canActivate: [AuthGuard, RoleGuard],
     data: { roles: ['admin'] },
+  },
+  // Endpoints de prueba
+  {
+    path: 'chatwebsocket',
+    component: ChatWebsocketComponent,
   },
 
   // deben estar al final

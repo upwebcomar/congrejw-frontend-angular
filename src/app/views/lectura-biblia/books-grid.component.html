@@ -3,11 +3,14 @@
     <div
       *ngFor="let book of books"
       class="book"
-      [ngStyle]="{ 'user-select': 'none', cursor: 'pointer' }"
+      [ngStyle]="{
+        'background-color': getBookColor(book),
+        'user-select': 'none',
+        cursor: 'pointer'
+      }"
       (click)="selectBook(book)"
     >
       {{ book.name | slice : 0 : 3 }}
-      <!-- Muestra las primeras 3 letras del nombre del libro -->
     </div>
   </div>
 

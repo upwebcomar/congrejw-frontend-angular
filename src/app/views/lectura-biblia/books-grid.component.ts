@@ -1,10 +1,11 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { BibleStateService, Book } from './bible-state.service';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../../auth/auth.service';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { GetBooksProgressDto } from './dto/getBooksProgress.dto';
 @Component({
   selector: 'app-books-grid',
   standalone: true,
@@ -12,8 +13,9 @@ import { of } from 'rxjs';
   templateUrl: './books-grid.component.html',
   styleUrls: ['./books-grid.component.css'],
 })
-export class BooksGridComponent implements OnInit, OnDestroy {
+export class BooksGridComponent implements OnInit {
   books: Book[] = [];
+  readBooks: GetBooksProgressDto[] = [];
   selectedBook!: Book;
   chapters: number[] = [];
   visibleBooks: { [key: number]: boolean } = {}; // Controlar la visibilidad de los libros
@@ -30,11 +32,22 @@ export class BooksGridComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Cargar libros al iniciar
-    this.bibleService.loadBooks();
-    this.bibleService.getBooks().subscribe((books) => (this.books = books));
+    this.loadBooks();
   }
 
-  ngOnDestroy() {}
+  async loadBooks() {
+    try {
+      // Primero carga los libros
+      this.books = await firstValueFrom(this.bibleService.loadBooksMock());
+
+      // Luego obtiene el progreso de los libros leídos
+      this.readBooks = await firstValueFrom(
+        this.bibleService.getBooksProgress(this.userId)
+      );
+    } catch (error) {
+      console.error('Error cargando libros o progreso:', error);
+    }
+  }
 
   // Seleccionar un libro y obtener los capítulos leídos por el usuario
   selectBook(book: Book) {
@@ -91,6 +104,7 @@ export class BooksGridComponent implements OnInit, OnDestroy {
   visibilityBooks(book: Book) {
     this.isvisibilityBooks = true;
     this.visibleBooks[book.id] = false;
+    this.loadBooks();
   }
 
   // Verificar si un libro es visible
@@ -101,5 +115,36 @@ export class BooksGridComponent implements OnInit, OnDestroy {
   // Verificar si un capítulo está leído
   isChapterRead(chapter: number): boolean {
     return this.selectedBook?.readChapters.includes(chapter) ?? false;
+  }
+  getBookProgress(book: Book): number {
+    const progressData = this.readBooks.find((rb) => rb.name === book.name);
+    const progress = progressData
+      ? this.calculateProgress(progressData.totalReadChapters, book.chapters)
+      : 0;
+
+    return progress;
+  }
+
+  getBookColor(book: Book): string {
+    const progress = this.getBookProgress(book);
+    return this.getColor(progress);
+  }
+  getColor(progress: number): string {
+    if (progress === 100) return '#008000'; // Verde fuerte (100%)
+    if (progress >= 90) return '#FFD700'; // Amarillo dorado (90-99%)
+    if (progress >= 80) return '#FFC300'; // Amarillo intenso (80-89%)
+    if (progress >= 70) return '#FFA500'; // Naranja (70-79%)
+    if (progress >= 60) return '#FF8C00'; // Naranja oscuro (60-69%)
+    if (progress >= 50) return '#FF6347'; // Rojo tomate (50-59%)
+    if (progress >= 40) return '#FF4500'; // Rojo anaranjado fuerte (40-49%)
+    if (progress >= 30) return '#DC143C'; // Rojo carmesí (30-39%)
+    if (progress >= 20) return '#B22222'; // Rojo fuego (20-29%)
+    if (progress > 0) return '#8B0000'; // Rojo oscuro (1-19%)
+    return '#62366E'; // Morado oscuro (0%)
+  }
+
+  calculateProgress(readChapters: number, totalChapters: number): number {
+    if (!readChapters || totalChapters === 0) return 0;
+    return Math.round((readChapters / totalChapters) * 100);
   }
 }

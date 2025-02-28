@@ -29,7 +29,7 @@
   justify-content: center;
   height: 100px; /* Asegura que los capítulos sean cuadrados */
   width: 100px; /* Asegura que los capítulos sean cuadrados */
-  background: #62366e; /* Fondo gris claro */
+  background: #62366e; /* Fondo violeta */
   border-radius: 8px; /* Bordes redondeados */
   cursor: pointer; /* Puntero al pasar el mouse */
   transition: background 0.3s; /* Transición suave */
