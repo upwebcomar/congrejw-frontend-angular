@@ -12,7 +12,7 @@ import { AuthGuard } from './auth/guards/auth.guard';
 import { FilePreviewComponent } from './views/pdf-preview/file-preview.component';
 import { CrearAnuncioComponent } from './views/tableroanuncios/forms/crear-anuncio.component';
 import { EditarAnuncioComponent } from './views/tableroanuncios/forms/editar-anuncio.component';
-import { FilesManagerComponent } from './views/files/files-manager.component';
+import { FilesManagerComponent } from './services/files/files-manager.component';
 import { gruposServiciodelcampoComponent } from './views/grupos-serviciodelcampo/grupos-serviciodelcampo.component';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { MicuentaComponent } from './views/micuenta/micuenta.component';
@@ -86,12 +86,6 @@ export const routes: Routes = [
     component: BooksGridComponent,
     canActivate: [AuthGuard, RoleGuard],
     data: { roles: ['user'] },
-  },
-  {
-    path: 'files-manager',
-    component: FilesManagerComponent,
-    canActivate: [AuthGuard, RoleGuard],
-    data: { roles: ['admin', 'user'] },
   },
 
   // Endpoints de prueba

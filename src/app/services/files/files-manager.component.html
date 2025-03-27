@@ -1,11 +1,15 @@
-<div class="container mt-5">
+<div class="container">
   <h2>Files Manager</h2>
 
   <!-- Upload Section -->
   <div class="mb-4">
     <h4>Upload File</h4>
     <div class="input-group">
-      <input type="file" class="form-control" (change)="onFileSelected($event)" />
+      <input
+        type="file"
+        class="form-control"
+        (change)="onFileSelected($event)"
+      />
       <button class="btn btn-primary" (click)="uploadFile()">Upload</button>
     </div>
   </div>
@@ -20,7 +24,10 @@
       >
         {{ file }}
         <div>
-          <button class="btn btn-secondary btn-sm m-1" (click)="downloadFile(file)">
+          <button
+            class="btn btn-secondary btn-sm m-1"
+            (click)="downloadFile(file)"
+          >
             Download
           </button>
           <button class="btn btn-danger btn-sm m-1" (click)="removeFile(file)">
@@ -34,6 +41,6 @@
     <p>No files available.</p>
   </div>
 
-<!-- Debugging -->
-<!--  <pre>{{ files | json }}</pre> -->
+  <!-- Debugging -->
+  <!--  <pre>{{ files | json }}</pre> -->
 </div>

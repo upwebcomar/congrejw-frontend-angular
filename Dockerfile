@@ -3,12 +3,11 @@ FROM node:18 AS build
 
 WORKDIR /app
 
-# Copiar el package.json y el package-lock.json
+# Copiar package.json y package-lock.json antes para aprovechar la caché
 COPY package*.json ./
 
-# Instalar las dependencias
-RUN npm install --force or --legacy-peer-deps
-
+# Usar cacheo de dependencias (evita reinstalaciones innecesarias)
+RUN npm ci --legacy-peer-deps
 
 # Copiar el código de la aplicación Angular al contenedor
 COPY . .
@@ -16,26 +15,21 @@ COPY . .
 # Construir la aplicación Angular en modo producción
 RUN npm run build -- --configuration production
 
-# Generar el Service Worker con Workbox (opcional)
-RUN npx workbox injectManifest workbox-config.js
-
-# Etapa 2: Servir la aplicación con un servidor web
+# Etapa 2: Servir la aplicación con NGINX
 FROM nginx:alpine
 
-# Copiar los archivos compilados de Angular desde la etapa anterior
+# Copiar los archivos compilados desde la etapa anterior
 COPY --from=build /app/dist/congrejw/browser /usr/share/nginx/html
 
-# Copiar el archivo de configuración personalizado de NGINX (opcional)
+# Copiar configuración personalizada de NGINX (opcional)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copiar el script de inicialización (init.sh) al contenedor
-COPY ./init.sh /init.sh
+# Copiar script de inicialización (init.sh)
 
-# Darle permisos de ejecución al script
-RUN chmod +x /init.sh
+COPY ./start.sh /start.sh
 
-# Exponer el puerto 80 para que el contenedor sirva la aplicación
+RUN chmod +x /start.sh
+
+# Exponer el puerto 80
 EXPOSE 80
 
-# Comando para ejecutar el script de inicialización y luego iniciar NGINX
-CMD ["/bin/sh", "/init.sh"]

@@ -5,26 +5,29 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { SidebarService } from './sidebar.service';
 
 @Component({
-    selector: 'app-sidebar',
-    imports: [CommonModule, RouterModule],
-    templateUrl: './sidebar.component.html',
-    styleUrls: ['./sidebar.component.css']
+  selector: 'app-sidebar',
+  imports: [CommonModule, RouterModule],
+  templateUrl: './sidebar.component.html',
+  styleUrls: ['./sidebar.component.css'],
 })
 export class SidebarComponent implements OnInit {
   isCollapsed = true;
-  @Input() set linkActive(value:string){this.updateLinkActive(value);}
-  isActiveUsuarios:boolean = false
-  isActiveDashboard:boolean = false
-  isActiveNotifications:boolean = false
-  sidebarItem$:BehaviorSubject<string>;
+  @Input() set linkActive(value: string) {
+    this.updateLinkActive(value);
+  }
+  isActiveUsuarios: boolean = false;
+  isActiveFilesManager: boolean = false;
+  isActiveNotifications: boolean = false;
+  isActivePushNotification: boolean = false;
+  sidebarItem$: BehaviorSubject<string>;
 
-  constructor(
-    private sidebarService:SidebarService
-  ){
-    this.sidebarItem$ = this.sidebarService.getSidebarItem()
+  constructor(private sidebarService: SidebarService) {
+    this.sidebarItem$ = this.sidebarService.getSidebarItem();
     this.sidebarItem$.subscribe({
-      next:value => {this.updateLinkActive(value)}
-    })
+      next: (value) => {
+        this.updateLinkActive(value);
+      },
+    });
   }
   ngOnInit(): void {
     this.sidebarItem$.next('users');
@@ -35,34 +38,36 @@ export class SidebarComponent implements OnInit {
   }
 
   notCollapsedSidebar() {
-    this.isCollapsed = false
+    this.isCollapsed = false;
   }
 
-  sidebarItem(value:string){
+  sidebarItem(value: string) {
     console.log(value);
-    
-    this.sidebarItem$.next(value)
+
+    this.sidebarItem$.next(value);
   }
 
-  updateLinkActive(value:string){
-    this.isActiveUsuarios = false
-    this.isActiveNotifications = false
-    this.isActiveDashboard = false
+  updateLinkActive(value: string) {
+    this.isActiveUsuarios = false;
+    this.isActiveNotifications = false;
+    this.isActivePushNotification = false;
+    this.isActiveFilesManager = false;
 
-   
     switch (value) {
       case 'users':
-        this.isActiveUsuarios = true
+        this.isActiveUsuarios = true;
         break;
       case 'notifications':
-        this.isActiveNotifications = true
+        this.isActiveNotifications = true;
         break;
-      case 'dashboard':
-        this.isActiveDashboard = true
+      case 'pushNotification':
+        this.isActivePushNotification = true;
+        break;
+      case 'filesManager':
+        this.isActiveFilesManager = true;
         break;
       default:
-        // Código si no coincide con ninguno de los valores anteriores
+      // Código si no coincide con ninguno de los valores anteriores
     }
   }
-
 }

@@ -20,3 +20,7 @@ docker build -t $IMAGE_NAME:$TAG .
 
 log "Imagen construida exitosamente."
 
+docker compose down
+
+docker compose up -d
+

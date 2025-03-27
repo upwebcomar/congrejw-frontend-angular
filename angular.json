@@ -39,11 +39,6 @@
                 "glob": "manifest.webmanifest",
                 "input": "src",
                 "output": "/"
-              },
-              {
-                "glob": "workbox-custom-sw.js",
-                "input": "src",
-                "output": "/"
               }
             ],
             "styles": [

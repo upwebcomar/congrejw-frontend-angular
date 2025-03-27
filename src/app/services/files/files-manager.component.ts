@@ -1,20 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { FileService } from './files.service';
 import { CommonModule } from '@angular/common';
-import { LoggerService } from '../../services/logger.service';
+import { LoggerService } from '../logger.service';
 
 @Component({
-    selector: 'app-files-manager',
-    imports: [CommonModule],
-    templateUrl: './files-manager.component.html',
-    styles: ''
+  selector: 'app-files-manager',
+  imports: [CommonModule],
+  templateUrl: './files-manager.component.html',
+  styles: '',
 })
 export class FilesManagerComponent implements OnInit {
   files: string[] = [];
   selectedFile: File | null = null;
   private context: string = 'FilesManagerComponent';
 
-  constructor(private fileService: FileService, private logger: LoggerService) {}
+  constructor(
+    private fileService: FileService,
+    private logger: LoggerService
+  ) {}
 
   ngOnInit(): void {
     this.loadFiles();
@@ -24,14 +27,18 @@ export class FilesManagerComponent implements OnInit {
     this.selectedFile = event.target.files[0];
 
     if (this.selectedFile) {
-      const sanitizedFileName = this.fileService.sanitizeFileName(this.selectedFile.name);
+      const sanitizedFileName = this.fileService.sanitizeFileName(
+        this.selectedFile.name
+      );
       console.log('Sanitized File Name:', sanitizedFileName);
     }
   }
 
   uploadFile(): void {
     if (this.selectedFile) {
-      const sanitizedFileName = this.fileService.sanitizeFileName(this.selectedFile.name);
+      const sanitizedFileName = this.fileService.sanitizeFileName(
+        this.selectedFile.name
+      );
       const formData = new FormData();
       formData.append('file', this.selectedFile);
       formData.append('filename', sanitizedFileName);

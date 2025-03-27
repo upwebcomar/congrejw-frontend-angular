@@ -25,13 +25,15 @@
       id="navbarSupportedContent"
     >
       <ul class="navbar-nav mb-2 mb-lg-0">
-        <li class="nav-item">
+        <!-- Item Inicio -->
+        <li id="Inicio" class="nav-item">
           <a class="nav-link" [routerLink]="'/'">Inicio</a>
         </li>
-        <li class="nav-item">
+        <!-- Item Mi Cuenta -->
+        <li id="Mi_Cuenta" class="nav-item">
           <a #login class="nav-link" [routerLink]="loginLink">Mi Cuenta</a>
         </li>
-
+        <!-- Dropdown Menu -->
         <ng-container *ngIf="isLogged">
           <li class="nav-item dropdown">
             <a
@@ -145,8 +147,8 @@
             </ul>
           </li>
         </ng-container>
-
-        <li class="nav-item position-relative">
+        <!-- Item Notificaciones icono campana -->
+        <li id="Notificaciones" class="nav-item position-relative">
           <a class="nav-link" (click)="toggleNotify($event)">
             <i class="bi bi-bell"></i>
             <span

@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="d-block m-3">
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="requestNotificationPermission()"
+    >
+      🔔 Activar Notificaciones
+    </button>
+  </div>
+  <div class="d-block m-3">
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="subcripcionPushNotification()"
+    >
+      🔔 Suscripción a Push Notification
+    </button>
+  </div>
+  <div class="d-block m-3">
+    <form (ngSubmit)="enviarNotificacion()">
+      <div class="mb-2">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="URL"
+          [(ngModel)]="notificacion.url"
+          name="url"
+          required
+        />
+      </div>
+      <div class="mb-2">
+        <textarea
+          class="form-control"
+          placeholder="Payload JSON"
+          [(ngModel)]="notificacion.payload"
+          name="payload"
+          rows="5"
+          required
+        ></textarea>
+      </div>
+      <button type="submit" class="btn btn-success">Enviar</button>
+    </form>
+  </div>
+</div>

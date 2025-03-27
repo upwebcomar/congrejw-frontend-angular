@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PushService } from '../../services/push-notifications/push.service';
+import { PushNotificationService } from '../../services/push-notifications/push-notification.service';
 
 @Component({
   selector: 'app-configuracion',
@@ -9,7 +9,7 @@ import { PushService } from '../../services/push-notifications/push.service';
   styles: ``,
 })
 export class ConfiguracionComponent {
-  constructor(private pushService: PushService) {}
+  constructor(private pushService: PushNotificationService) {}
 
   solicitarPermiso() {
     this.pushService.requestNotificationPermission();

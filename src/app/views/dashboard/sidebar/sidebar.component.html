@@ -21,6 +21,7 @@
     </a>
     <hr />
     <ul class="nav nav-pills flex-column mb-auto">
+      <!-- Home -->
       <li class="nav-item">
         <a
           routerLink="/"
@@ -31,6 +32,7 @@
           <span class="sidebar-link">Home</span>
         </a>
       </li>
+      <!-- Users -->
       <li class="nav-item">
         <a
           class="nav-link link-body-emphasis"
@@ -42,6 +44,7 @@
           <span class="sidebar-link">Usuarios</span>
         </a>
       </li>
+      <!-- Notifications -->
       <li class="nav-item">
         <a
           class="nav-link link-body-emphasis"
@@ -53,17 +56,29 @@
           <span class="sidebar-link">Notifications</span>
         </a>
       </li>
+      <!-- Push Notifications -->
       <li>
         <a
           class="nav-link link-body-emphasis"
-          [class.active]="isActiveDashboard"
-          (click)="sidebarItem('dashboard')"
+          [class.active]="isActivePushNotification"
+          (click)="sidebarItem('pushNotification')"
         >
-          <i class="bi bi-speedometer2 me-2"></i>
-          <span class="sidebar-link">Dashboard</span>
+          <i class="bi bi-envelope-exclamation me-2"></i>
+          <span class="sidebar-link">Push Notifications</span>
         </a>
       </li>
-
+      <!-- Item Files Manager -->
+      <li>
+        <a
+          class="nav-link link-body-emphasis"
+          [class.active]="isActiveFilesManager"
+          (click)="sidebarItem('filesManager')"
+        >
+          <i class="bi bi-folder me-2"></i>
+          <span class="sidebar-link">Files Manager</span>
+        </a>
+      </li>
+      <!-- Dropdown -->
       <div class="dropdown nav-link link-body-emphasis">
         <a
           href="#"
@@ -76,11 +91,6 @@
           <span class="sidebar-link">Links</span>
         </a>
         <ul class="dropdown-menu text-small shadow">
-          <li>
-            <a class="dropdown-item" [routerLink]="'/files-manager'"
-              >Files Manager</a
-            >
-          </li>
           <li>
             <a class="dropdown-item" [routerLink]="'/chatwebsocket'"
               >Chat Websocket</a

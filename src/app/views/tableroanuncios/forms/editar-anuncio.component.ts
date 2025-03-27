@@ -1,22 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoggerService } from '../../../services/logger.service';
 import { TableroAnuncios } from '../tableroanuncios.interface';
 import { environment } from '../../../../environments/environment';
-import { FileService } from '../../files/files.service';
-
+import { FileService } from '../../../services/files/files.service';
 
 type TableroAnunciosForm = {
   [K in keyof TableroAnuncios]: FormControl<TableroAnuncios[K]>;
-}; 
+};
 
 @Component({
-    selector: 'app-editar-anuncio',
-    imports: [CommonModule, ReactiveFormsModule],
-    templateUrl: './editar-anuncio.component.html'
+  selector: 'app-editar-anuncio',
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './editar-anuncio.component.html',
 })
 export class EditarAnuncioComponent implements OnInit {
   anuncioForm!: FormGroup;
@@ -30,7 +34,7 @@ export class EditarAnuncioComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private logger: LoggerService,
-    private fileService:FileService
+    private fileService: FileService
   ) {
     // Inicializa el formulario con valores predeterminados
     this.anuncioForm = this.fb.group({
@@ -47,14 +51,14 @@ export class EditarAnuncioComponent implements OnInit {
     // Obtiene el ID del anuncio desde la URL
     this.anuncioId = this.route.snapshot.paramMap.get('id');
     if (this.anuncioId) {
-      this.logger.log(this.context,'id anuncio:',this.anuncioId)
+      this.logger.log(this.context, 'id anuncio:', this.anuncioId);
       this.cargarDatosAnuncio(this.anuncioId);
     }
   }
 
   // Carga los datos del anuncio en el formulario
   cargarDatosAnuncio(id: string) {
-    this.http.get(environment.apiUrl+'/tablero-anuncios/'+id).subscribe({
+    this.http.get(environment.apiUrl + '/tablero-anuncios/' + id).subscribe({
       next: (data: Partial<TableroAnuncios>) => {
         this.anuncioForm.patchValue(data);
         this.logger.log(this.context, 'Datos cargados:', data);
@@ -74,12 +78,13 @@ export class EditarAnuncioComponent implements OnInit {
     }
   }
   clearPathfile() {
-    const confirmDelete = confirm('¿Estás seguro de que deseas eliminar el contenido?');
+    const confirmDelete = confirm(
+      '¿Estás seguro de que deseas eliminar el contenido?'
+    );
     if (confirmDelete) {
       this.anuncioForm.get('pathfile')?.setValue('');
     }
   }
-  
 
   // Envía los datos para modificar el anuncio
   onSubmit() {
@@ -91,28 +96,32 @@ export class EditarAnuncioComponent implements OnInit {
     const formData = new FormData();
     formData.append('titulo', this.anuncioForm.get('titulo')?.value);
     formData.append('descripcion', this.anuncioForm.get('descripcion')?.value);
-    let pathfile = this.anuncioForm.get('pathfile')?.value
-    pathfile = this.fileService.sanitizeFileName(pathfile)
-    formData.append('pathfile',pathfile );
+    let pathfile = this.anuncioForm.get('pathfile')?.value;
+    pathfile = this.fileService.sanitizeFileName(pathfile);
+    formData.append('pathfile', pathfile);
     formData.append('page', this.anuncioForm.get('page')?.value);
-    if(this.anuncioForm.get('show_all')?.value == true){
+    if (this.anuncioForm.get('show_all')?.value == true) {
       formData.append('show_all', this.anuncioForm.get('show_all')?.value);
     }
     if (this.pdfFile) {
       formData.append('file', this.pdfFile);
     }
 
-      // Mostrar el contenido de FormData
-      formData.forEach((value, key) => {console.log(key,value);})
-      
-    this.http.put(`${environment.apiUrl}/tablero-anuncios/${this.anuncioId}`, formData).subscribe({
-      next: (response) => {
-        this.logger.log(this.context, 'Anuncio modificado:', response);
-        this.router.navigate(['tablero-anuncios']);
-      },
-      error: (error) => {
-        alert('Error al modificar el anuncio: ' + error.message);
-      },
+    // Mostrar el contenido de FormData
+    formData.forEach((value, key) => {
+      console.log(key, value);
     });
+
+    this.http
+      .put(`${environment.apiUrl}/tablero-anuncios/${this.anuncioId}`, formData)
+      .subscribe({
+        next: (response) => {
+          this.logger.log(this.context, 'Anuncio modificado:', response);
+          this.router.navigate(['tablero-anuncios']);
+        },
+        error: (error) => {
+          alert('Error al modificar el anuncio: ' + error.message);
+        },
+      });
   }
 }
