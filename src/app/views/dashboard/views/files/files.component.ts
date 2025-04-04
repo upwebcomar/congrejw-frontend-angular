@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FilesManagerComponent } from '../../../../services/files/files-manager.component';
+import { FilesManagerComponent } from '../../../../components/files/files-manager.component';
 
 /**
  * View que muestra el componente app-pushNotification

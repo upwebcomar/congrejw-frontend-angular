@@ -5,7 +5,7 @@ import { RoleService } from '../auth/roles/role.service';
 import { AuthService } from '../auth/auth.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AppStateService {
   private readonly context = 'AppStateService';
@@ -17,35 +17,29 @@ export class AppStateService {
   logged$: Observable<boolean> = this.logged.asObservable();
 
   constructor(
-      private logger:LoggerService,
-      private roleService:RoleService,
-      private authService:AuthService
-      ){
-        this.logger.log(this.context,'AppStateService funcionando');
-        const token = this.roleService.getToken()
-        if(token && this.authService.isTokenValid()){
-          const payload = this.roleService.loadDataFromToken(token)
-          if (payload != undefined){
-          this.setUserState(payload.username)
-          this.setLoggedState(true)
-          this.logger.log(this.context,'Token valido')
-          }
-        }else{this.logger.log(this.context,'Token no valido')}
+    private logger: LoggerService,
+    private roleService: RoleService,
+    private authService: AuthService
+  ) {
+    this.logger.log(this.context, 'AppStateService funcionando');
+    const token = this.roleService.getToken();
+    if (token && this.authService.isTokenValid()) {
+      const payload = this.roleService.loadDataFromToken(token);
+      if (payload != undefined) {
+        this.setUserState(payload.username);
+        this.setLoggedState(true);
+        this.logger.log(this.context, 'Token valido');
+      }
+    } else {
+      this.logger.log(this.context, 'Token no valido');
+    }
   }
 
-
-  setUserState(username: string, context?:string): void {
+  setUserState(username: string): void {
     this.username.next(username);
-      // Solo registra el contexto si está definido
-    if (context) {
-      this.logger.log(context, `setUserState(): ${username}`);
-    }
   }
 
-  setLoggedState(data: boolean, context?:string): void {
-    if(context){
-    this.logger.log(context, `setLoggedState(): ${data}`);
-    }
+  setLoggedState(data: boolean, context?: string): void {
     this.logged.next(data);
   }
 }

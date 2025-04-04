@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './views/home/home.component';
 import { ModalComponent } from './components/modal/modal.component';
-import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { TableroanunciosComponent } from './views/tableroanuncios/tableroanuncios.component';
 import { AdminComponent } from './test endpoints/admin/admin.component';
@@ -12,7 +11,6 @@ import { AuthGuard } from './auth/guards/auth.guard';
 import { FilePreviewComponent } from './views/pdf-preview/file-preview.component';
 import { CrearAnuncioComponent } from './views/tableroanuncios/forms/crear-anuncio.component';
 import { EditarAnuncioComponent } from './views/tableroanuncios/forms/editar-anuncio.component';
-import { FilesManagerComponent } from './services/files/files-manager.component';
 import { gruposServiciodelcampoComponent } from './views/grupos-serviciodelcampo/grupos-serviciodelcampo.component';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { MicuentaComponent } from './views/micuenta/micuenta.component';
@@ -20,12 +18,13 @@ import { ConfiguracionComponent } from './views/configuracion/configuracion.comp
 import { NotificationComponent } from './views/notifications/notification.component';
 import { BooksGridComponent } from './views/lectura-biblia/books-grid.component';
 import { ChatWebsocketComponent } from './components/chatwebsocket/chat-websocket.component';
+import { IniciarSesionComponent } from './views/iniciar-sesion/iniciar-sesion.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'home', component: HomeComponent },
   { path: 'modal', component: ModalComponent },
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: IniciarSesionComponent },
   { path: 'register', component: RegisterComponent },
   {
     path: 'micuenta',

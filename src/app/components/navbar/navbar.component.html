@@ -29,10 +29,16 @@
         <li id="Inicio" class="nav-item">
           <a class="nav-link" [routerLink]="'/'">Inicio</a>
         </li>
-        <!-- Item Mi Cuenta -->
-        <li id="Mi_Cuenta" class="nav-item">
-          <a #login class="nav-link" [routerLink]="loginLink">Mi Cuenta</a>
+        <!-- Mostrar cuando el usuario está logueado -->
+        <li class="nav-item" *ngIf="isLogged">
+          <a class="nav-link" [routerLink]="'/micuenta'">{{ userLogued }}</a>
         </li>
+
+        <!-- Mostrar cuando el usuario NO está logueado -->
+        <li class="nav-item" *ngIf="!isLogged">
+          <a class="nav-link" [routerLink]="'/login'">Loguearse</a>
+        </li>
+
         <!-- Dropdown Menu -->
         <ng-container *ngIf="isLogged">
           <li class="nav-item dropdown">

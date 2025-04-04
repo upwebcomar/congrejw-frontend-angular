@@ -17,21 +17,21 @@ import { CommonModule } from '@angular/common';
 import { RoleService } from '../../auth/roles/role.service';
 import { LoggerService } from '../../services/logger.service';
 import { NotificationComponent } from '../../views/notifications/notification.component';
-import { NotificationService } from '../../services/notifications/notification.service';
-import { Notification } from '../../views/notifications/notification.interface';
+import {
+  Notification,
+  NotificationService,
+} from '../../services/notification.service';
+import { AuthService } from '../../auth/auth.service';
+import { MicuentaComponent } from '../../views/micuenta/micuenta.component';
 
 @Component({
-    selector: 'app-navbar',
-    imports: [RouterModule, CommonModule, NotificationComponent],
-    templateUrl: './navbar.component.html',
-    styleUrl: './navbar.component.css'
+  selector: 'app-navbar',
+  imports: [RouterModule, CommonModule, NotificationComponent],
+  templateUrl: './navbar.component.html',
+  styleUrl: './navbar.component.css',
 })
-export class NavbarComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('login') login!: ElementRef<HTMLAnchorElement>;
-
-  private loggedSubscription!: Subscription;
-  private actualizaNavBarSubscription!: Subscription;
-  loginLink: string = 'login';
+export class NavbarComponent implements AfterViewInit {
+  userLogued: string = 'Loguear';
   isLogged: boolean = false;
   roles!: string[];
   private context: string = 'NavbarComponent';
@@ -45,6 +45,7 @@ export class NavbarComponent implements AfterViewInit, OnDestroy {
     private appState: AppStateService,
     private cdr: ChangeDetectorRef,
     private rolesService: RoleService,
+    private authService: AuthService,
     private logger: LoggerService,
     private notificationsService: NotificationService,
     private renderer: Renderer2
@@ -59,10 +60,6 @@ export class NavbarComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.actualizarNavbar();
-    this.actualizaNavBarSubscription =
-      this.navbarService.actualizarNavbar$.subscribe(() => {
-        this.actualizarNavbar();
-      });
   }
   // Métodos para verificar los roles permitidos
   isTieneRolPermitido(accion: string[]): boolean {
@@ -72,17 +69,11 @@ export class NavbarComponent implements AfterViewInit, OnDestroy {
     // Si al abrir la aplicacion hay un token valido actualizo el navbar en login
     this.appState.logged$.subscribe((data) => {
       if (data) {
-        // actualizo link micuenta
-        this.appState.userState$.subscribe((newText) => {
-          this.login.nativeElement.textContent = newText;
-          this.loginLink = 'micuenta';
-        });
+        this.userLogued = this.authService.getUsername();
         this.isLogged = data;
         this.cdr.detectChanges(); // Forza la detección de cambios para evitar el error
       } else {
         this.isLogged = data;
-        this.login.nativeElement.textContent = 'Loguear';
-        this.loginLink = 'login';
         this.cdr.detectChanges(); // Forza la detección de cambios para evitar el error
       }
     });
@@ -112,9 +103,5 @@ export class NavbarComponent implements AfterViewInit, OnDestroy {
   private closeAllSubmenus() {
     const openMenus = document.querySelectorAll('.dropdown-menu.show');
     openMenus.forEach((menu) => this.renderer.removeClass(menu, 'show'));
-  }
-
-  ngOnDestroy(): void {
-    this.loggedSubscription.unsubscribe();
   }
 }

@@ -1,11 +1,18 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { Notification } from '../../views/notifications/notification.interface';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
-import { AuthService } from '../../auth/auth.service';
-import { LoggerService } from '../logger.service';
+import { environment } from '../../environments/environment';
+import { AuthService } from '../auth/auth.service';
+import { LoggerService } from './logger.service';
 
+export interface Notification {
+  id: number;
+  type: 'success' | 'error' | 'info' | 'warning';
+  message: string;
+  timeout?: number; // Opcional para auto-eliminar
+  createdAt?: Date;
+  userId: number;
+}
 @Injectable({
   providedIn: 'root',
 })

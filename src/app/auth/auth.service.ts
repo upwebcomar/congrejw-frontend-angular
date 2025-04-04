@@ -10,17 +10,14 @@ import { JwtPayload } from './jwt-payload.interface';
 })
 export class AuthService {
   private apiUrl = environment.apiUrl;
-  
 
-  constructor(
-    private http: HttpClient,
-    
-  ) {
-    
-  }
+  constructor(private http: HttpClient) {}
 
   login(credentials: { username: string; password: string }) {
-    return this.http.post(`${this.apiUrl}/auth/login`, credentials);
+    return this.http.post<{ access_token: string }>(
+      `${this.apiUrl}/auth/login`,
+      credentials
+    );
   }
 
   saveToken(token: string) {
@@ -28,7 +25,15 @@ export class AuthService {
   }
 
   getToken() {
-    return localStorage.getItem('access_token');
+    if (this.isTokenValid()) {
+      return this.getTokenSaveInStorage();
+    } else {
+      return null;
+    }
+  }
+  private getTokenSaveInStorage() {
+    const token = localStorage.getItem('access_token');
+    return token;
   }
 
   register(credentials: RegisterDto) {
@@ -36,7 +41,7 @@ export class AuthService {
   }
 
   isTokenValid(): boolean {
-    const token = this.getToken();
+    const token = this.getTokenSaveInStorage();
     if (!token) return false;
 
     try {
@@ -49,28 +54,36 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem('access_token');
-    
+    this.removeToken();
   }
-    // Cargar la data desde el token JWT
-    loadDataFromToken(token: string): JwtPayload | undefined {
-      try {
-        const decodedToken: any = jwtDecode(token); // Decodifica el token
-       return decodedToken
-      } catch (error) {
-        console.error('Error al decodificar el token:', error);
-        return 
-      }
-    }
 
-    getUserId():number{
-      const token = this.getToken()
-      if(token !== null){
-        const payload = this.loadDataFromToken(token)
-        const userId = payload?.userId
-        return userId? userId : 0
-      }
-      return 0
+  removeToken() {
+    localStorage.removeItem('access_token');
+  }
+
+  // Cargar la data desde el token JWT
+  loadDataFromToken(token: string): JwtPayload {
+    const decodedToken: any = jwtDecode(token); // Decodifica el token
+    return decodedToken;
+  }
+
+  getUserId(): number {
+    const token = this.getToken();
+    if (token !== null) {
+      const payload = this.loadDataFromToken(token);
+      const userId = payload?.userId;
+      return userId ? userId : 0;
     }
-  
+    return 0;
+  }
+
+  getUsername(): string {
+    const username = '';
+    const token = this.getToken();
+    if (token !== null) {
+      const payload = this.loadDataFromToken(token);
+      return payload.username;
+    }
+    return username;
+  }
 }
