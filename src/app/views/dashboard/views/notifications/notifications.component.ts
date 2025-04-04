@@ -6,11 +6,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { AllUserDto } from '../../../../services/users/all-users.dto';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment';
 import { LoggerService } from '../../../../services/logger.service';
-import { NotificationService } from '../../../../services/notifications/notification.service';
+import { NotificationService } from '../../../../services/notification.service';
+import { AllUserDto } from '../../../../services/users.service';
 
 interface User {
   id: number;
@@ -27,10 +27,10 @@ interface Notification {
 }
 
 @Component({
-    selector: 'app-send-notification',
-    imports: [CommonModule, ReactiveFormsModule],
-    templateUrl: './notifications.component.html',
-    styles: []
+  selector: 'app-send-notification',
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './notifications.component.html',
+  styles: [],
 })
 export class SendNotificationComponent {
   notificationForm: FormGroup;

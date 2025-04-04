@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { AllUserDto } from '../../../../services/users/all-users.dto';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment';
 import { LoggerService } from '../../../../services/logger.service';
 import { RoleService } from '../../../../auth/roles/role.service';
-import { UsersService } from '../../../../services/users/users.service';
+import { AllUserDto, UsersService } from '../../../../services/users.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
-    imports: [CommonModule, FormsModule],
-    selector: 'dashboard-users',
-    templateUrl: './users.component.html'
+  imports: [CommonModule, FormsModule],
+  selector: 'dashboard-users',
+  templateUrl: './users.component.html',
 })
 export class UsersComponent implements OnInit {
   users!: AllUserDto[];

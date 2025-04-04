@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FileService } from './files.service';
 import { CommonModule } from '@angular/common';
-import { LoggerService } from '../logger.service';
+import { LoggerService } from '../../services/logger.service';
+import { FileService } from '../../services/files.service';
+import { MessageService } from '../../services/messages.services';
 
 @Component({
   selector: 'app-files-manager',
@@ -16,7 +17,8 @@ export class FilesManagerComponent implements OnInit {
 
   constructor(
     private fileService: FileService,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private message: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -51,32 +53,31 @@ export class FilesManagerComponent implements OnInit {
         error: (err) => this.handleError(err, 'Error uploading file.'),
       });
     } else {
-      alert('Please select a file to upload.');
+      this.message.alert('Please select a file to upload.');
     }
   }
 
   downloadFile(filename: string): void {
-    this.fileService.downloadFile(filename).subscribe({
-      next: (blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        a.click();
-        window.URL.revokeObjectURL(url);
-      },
-      error: (err) => this.handleError(err, 'Error downloading file.'),
-    });
+    this.fileService
+      .downloadAndSaveFile(filename)
+      .then(() => {
+        this.logger.log(this.context, 'Descarga completada');
+      })
+      .catch((error) => {
+        this.handleError(error, 'Error downloading file.');
+      });
   }
 
   removeFile(filename: string): void {
-    this.fileService.deleteFile(filename).subscribe({
-      next: () => {
-        alert('File deleted successfully!');
-        this.loadFiles();
-      },
-      error: (err) => this.handleError(err, 'Error deleting file.'),
-    });
+    if (this.message.confirm('Confirme si desea borrar el archivo')) {
+      this.fileService.deleteFile(filename).subscribe({
+        next: () => {
+          this.message.alert('File deleted successfully!');
+          this.loadFiles();
+        },
+        error: (err) => this.handleError(err, 'Error deleting file.'),
+      });
+    }
   }
 
   loadFiles(): void {
@@ -91,6 +92,6 @@ export class FilesManagerComponent implements OnInit {
 
   private handleError(error: any, userMessage: string): void {
     this.logger.error(this.context, error.message || 'Unknown Error', error);
-    alert(userMessage);
+    this.message.alert(userMessage);
   }
 }

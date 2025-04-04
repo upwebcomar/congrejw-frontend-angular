@@ -1,13 +1,30 @@
-<div class="login-container container">
+<div class="">
   <h2 class="text-center mb-4">Iniciar Sesión</h2>
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="col-md-6 offset-md-3">
-    
+  <form
+    [formGroup]="loginForm"
+    (ngSubmit)="onSubmit()"
+    class="col-md-6 offset-md-3"
+  >
     <!-- Nombre de usuario -->
     <div class="mb-3">
       <label for="username" class="form-label">Nombre de usuario:</label>
-      <input id="username" formControlName="username" type="text" class="form-control" />
-      <div *ngIf="loginForm.get('username')?.invalid && (loginForm.get('username')?.touched || loginForm.get('username')?.dirty)">
-        <small *ngIf="loginForm.get('username')?.errors?.['required']" class="text-danger">
+      <input
+        id="username"
+        formControlName="username"
+        type="text"
+        class="form-control"
+      />
+      <div
+        *ngIf="
+          loginForm.get('username')?.invalid &&
+          (loginForm.get('username')?.touched ||
+            loginForm.get('username')?.dirty)
+        "
+      >
+        <small
+          *ngIf="loginForm.get('username')?.errors?.['required']"
+          class="text-danger"
+        >
           El nombre de usuario es obligatorio.
         </small>
       </div>
@@ -16,9 +33,23 @@
     <!-- Contraseña -->
     <div class="mb-3">
       <label for="password" class="form-label">Contraseña:</label>
-      <input id="password" formControlName="password" type="password" class="form-control" />
-      <div *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.touched || loginForm.get('password')?.dirty)">
-        <small *ngIf="loginForm.get('password')?.errors?.['required']" class="text-danger">
+      <input
+        id="password"
+        formControlName="password"
+        type="password"
+        class="form-control"
+      />
+      <div
+        *ngIf="
+          loginForm.get('password')?.invalid &&
+          (loginForm.get('password')?.touched ||
+            loginForm.get('password')?.dirty)
+        "
+      >
+        <small
+          *ngIf="loginForm.get('password')?.errors?.['required']"
+          class="text-danger"
+        >
           La contraseña es obligatoria.
         </small>
       </div>
@@ -26,16 +57,19 @@
 
     <!-- Botón de enviar -->
     <div class="d-flex justify-content-center">
-      <button type="submit" [disabled]="loading" class="btn btn-primary w-100">Iniciar Sesión</button>
+      <button type="submit" [disabled]="loading" class="btn btn-primary w-100">
+        Iniciar Sesión
+      </button>
     </div>
 
     <!-- Mensaje de error -->
     <div *ngIf="error" class="alert alert-danger mt-3">{{ error }}</div>
   </form>
-    <!-- Enlace para registrarse -->
-    <div class="text-center mt-4">
-      <p>¿No tienes una cuenta? <a routerLink="/register" class="text-primary">Regístrate aquí</a></p>
-    </div>
-  
+  <!-- Enlace para registrarse -->
+  <div class="text-center mt-4">
+    <p>
+      ¿No tienes una cuenta?
+      <a routerLink="/register" class="text-primary">Regístrate aquí</a>
+    </p>
+  </div>
 </div>
-

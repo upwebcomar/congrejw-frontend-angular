@@ -9,9 +9,9 @@ import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoggerService } from '../../../services/logger.service';
-import { TableroAnuncios } from '../tableroanuncios.interface';
 import { environment } from '../../../../environments/environment';
-import { FileService } from '../../../services/files/files.service';
+import { FileService } from '../../../services/files.service';
+import { TableroAnuncios } from '../../../services/tablero-anuncios/tablero-anuncios.interface';
 
 type TableroAnunciosForm = {
   [K in keyof TableroAnuncios]: FormControl<TableroAnuncios[K]>;

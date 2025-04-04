@@ -1,62 +1,94 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { LoggerService } from '../../services/logger.service';
 import { RoleService } from '../../auth/roles/role.service';
-import { TableroAnuncios } from './tableroanuncios.interface';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { TableroAnuncios } from '../../services/tablero-anuncios/tablero-anuncios.interface';
+import { TableroAnunciosService } from '../../services/tablero-anuncios/tablero-anuncios.service';
+import { InlineSpinnerComponent } from '../../components/spinners/inline-spinner/inline-spinner.component';
+import { MessageService } from '../../services/messages.services';
 
+/**
+ * Componente encargado de mostrar, gestionar y reordenar anuncios.
+ * Incluye funcionalidad para agregar, editar y eliminar anuncios según roles del usuario.
+ */
 @Component({
-    selector: 'app-anuncios',
-    imports: [CommonModule, RouterModule, DragDropModule],
-    templateUrl: './tableroanuncios.component.html',
-    styles: ''
+  selector: 'app-anuncios',
+  imports: [CommonModule, RouterModule, DragDropModule, InlineSpinnerComponent],
+  templateUrl: './tableroanuncios.component.html',
+  styles: '',
 })
 export class TableroanunciosComponent implements OnInit {
+  /** Lista de anuncios obtenidos del servidor */
   anuncios: TableroAnuncios[] = [];
-  cargando: boolean = true;
-  error: string | null = null;
-  roles!: string[];
-  private apiUrl = `${environment.apiUrl}/tablero-anuncios`;
-  context: string = 'TableroanunciosComponent';
-  modoEditar:boolean = false
 
-  // Roles permitidos para cada acción
+  /** Bandera de carga para mostrar spinner */
+  cargando: boolean = true;
+
+  /** Mensaje de error si falla la carga de anuncios */
+  error: string | null = null;
+
+  /** Roles del usuario actual */
+  roles!: string[];
+
+  /** URL base para acceder a archivos adjuntos */
+  private pathfile = `${environment.apiUrl}/files/`;
+
+  /** Contexto para logging */
+  context: string = 'TableroanunciosComponent';
+
+  /** Modo edición activado/desactivado */
+  modoEditar: boolean = false;
+
+  /** Roles permitidos para cada acción */
   rolesPermitidos = {
-    agregar: ['admin', 'editor'], // Roles permitidos para agregar un anuncio
-    editar: ['admin', 'editor'],  // Roles permitidos para editar un anuncio
-    borrar: ['admin'],            // Roles permitidos para borrar un anuncio
-    admin: ['admin'],            // Roles permitidos para borrar un anuncio
+    agregar: ['admin', 'editor'],
+    editar: ['admin', 'editor'],
+    borrar: ['admin'],
+    admin: ['admin'],
   };
 
   constructor(
-    private http: HttpClient,
     private logger: LoggerService,
-    private rolesService: RoleService
+    private rolesService: RoleService,
+    private tableroAnunciosService: TableroAnunciosService,
+    private message: MessageService
   ) {}
 
+  /**
+   * Hook de inicialización del componente.
+   * Obtiene los anuncios y los roles del usuario.
+   */
   ngOnInit(): void {
     this.obtenerAnuncios();
-    this.roles = this.rolesService.getRoles(); // Cargo los roles del usuario
+    this.roles = this.rolesService.getRoles();
   }
 
+  /**
+   * Obtiene la lista de anuncios desde el servidor.
+   * Ordena los anuncios por su posición y añade el path del archivo.
+   * Maneja errores de red y muestra mensajes al usuario.
+   */
   obtenerAnuncios(): void {
-    this.http.get<TableroAnuncios[]>(this.apiUrl).subscribe({
-      next: (data) => {
-        this.anuncios = data.sort((a, b) => a.position - b.position); // Ordenar por posición
-        this.anuncios.forEach((anuncio) => {
-          if(anuncio.pathfile){
-            anuncio.pathfile = `${environment.apiUrl}/files/${anuncio.pathfile}`;
-          }else {
-            anuncio.pathfile = ""
-          }
-          
-        });
+    this.tableroAnunciosService.getAnuncios().subscribe({
+      next: (data: TableroAnuncios[]) => {
+        this.anuncios = data
+          .sort((a, b) => a.position - b.position)
+          .map((anuncio) => ({
+            ...anuncio,
+            pathfile: anuncio.pathfile
+              ? `${this.pathfile}${anuncio.pathfile}`
+              : '',
+          }));
         this.cargando = false;
-        this.logger.log(this.context, 'Carga de anuncios desde el servidor', this.anuncios);
+        this.logger.log(
+          this.context,
+          'Carga de anuncios desde el servidor',
+          this.anuncios
+        );
       },
       error: (err) => {
         this.logger.error(this.context, 'Error al obtener anuncios:', err);
@@ -66,9 +98,13 @@ export class TableroanunciosComponent implements OnInit {
     });
   }
 
+  /**
+   * Elimina un anuncio por su ID tras confirmación del usuario.
+   * @param id - ID del anuncio a eliminar.
+   */
   borrarAnuncio(id: number): void {
     if (confirm('¿Estás seguro de que deseas eliminar este anuncio?')) {
-      this.http.delete(`${this.apiUrl}/${id}`).subscribe({
+      this.tableroAnunciosService.deleteAnuncio(id).subscribe({
         next: () => {
           this.logger.log(this.context, `Anuncio con ID ${id} eliminado.`);
           this.anuncios = this.anuncios.filter((anuncio) => anuncio.id !== id);
@@ -76,32 +112,48 @@ export class TableroanunciosComponent implements OnInit {
         },
         error: (err) => {
           this.logger.error(this.context, 'Error al eliminar el anuncio:', err);
-          alert('Hubo un problema al eliminar el anuncio.');
+          this.message.alert('Hubo un problema al eliminar el anuncio.');
         },
       });
     }
   }
 
+  /**
+   * Reordena los anuncios localmente tras evento de arrastre y
+   * actualiza el orden en el servidor si el usuario tiene permiso.
+   * @param event - Evento emitido por CdkDragDrop.
+   */
   reordenarAnuncios(event: CdkDragDrop<TableroAnuncios[]>): void {
-    if(this.tieneRolPermitido('editar') && this.modoEditar){
-          moveItemInArray(this.anuncios, event.previousIndex, event.currentIndex);
+    if (this.tieneRolPermitido('editar') && this.modoEditar) {
+      moveItemInArray(this.anuncios, event.previousIndex, event.currentIndex);
 
-    const anunciosId: { id: number }[] = this.anuncios.map((anuncio) => ({ id: anuncio.id }));
-    this.logger.log(this.context, 'Anuncios reordenados:', anunciosId);
-    this.http.put(`${this.apiUrl}/reorder`, { order: anunciosId }).subscribe({
-      next: () => this.logger.log(this.context, 'Orden actualizado en el servidor.'),
-      error: (err) => this.logger.error(this.context, 'Error al actualizar el orden:', err),
-    });
-    }else{return}
+      const anunciosId: { id: number }[] = this.anuncios.map((anuncio) => ({
+        id: anuncio.id,
+      }));
+      this.logger.log(this.context, 'Anuncios reordenados:', anunciosId);
 
-
+      this.tableroAnunciosService.updateAnuncio(anunciosId).subscribe({
+        next: (response) => this.logger.log(this.context, response.message),
+        error: (err) => this.logger.error(this.context, err),
+      });
+    }
   }
 
-  // Métodos para verificar los roles permitidos
+  /**
+   * Verifica si el usuario tiene permiso para realizar cierta acción según sus roles.
+   * @param accion - Acción a verificar: 'agregar', 'editar' o 'borrar'.
+   * @returns true si al menos uno de los roles del usuario tiene permiso.
+   */
   tieneRolPermitido(accion: 'agregar' | 'editar' | 'borrar'): boolean {
-    return this.roles.some((role) => this.rolesPermitidos[accion].includes(role));
+    return this.roles.some((role) =>
+      this.rolesPermitidos[accion].includes(role)
+    );
   }
 
-  //Toggle boton Editar
-  toggleEdit(){this.modoEditar? this.modoEditar = false : this.modoEditar = true}
+  /**
+   * Alterna el modo de edición del tablero de anuncios.
+   */
+  toggleEdit(): void {
+    this.modoEditar = !this.modoEditar;
+  }
 }
