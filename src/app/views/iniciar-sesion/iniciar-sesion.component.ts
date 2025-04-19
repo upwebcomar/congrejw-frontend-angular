@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { LoginComponent } from '../../auth/login/login.component';
+import { LoginComponent } from './login/login.component';
 import { CommonModule } from '@angular/common';
+import { LoginGoogleComponent } from './login-google/login-google.component';
 
 @Component({
   selector: 'app-iniciar-sesion',
   standalone: true,
-  imports: [CommonModule, LoginComponent],
+  imports: [CommonModule, LoginComponent, LoginGoogleComponent],
   templateUrl: './iniciar-sesion.component.html',
   styles: ``,
 })

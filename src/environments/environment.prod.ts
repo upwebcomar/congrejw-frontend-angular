@@ -1,12 +1,7 @@
 // Se cargan las variables de entorno dinamicamente.
 // Deben incluirse en el environment del compose.yml
 
-// Declarar la interfaz de `window.env` en este archivo
-declare global {
-  interface Window {
-    env?: { [key: string]: any };
-  }
-}
+// `window.env` declarado en global.d.ts
 
 export const environment = {
   production: true,

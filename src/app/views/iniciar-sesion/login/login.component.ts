@@ -7,11 +7,11 @@ import {
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { NavbarService } from '../../components/navbar/navbar.service';
-import { AppStateService } from '../../services/app-state.service';
-import { RoleService } from '../roles/role.service';
-import { LoggerService } from '../../services/logger.service';
-import { AuthService } from '../auth.service';
+import { NavbarService } from '../../../components/navbar/navbar.service';
+import { AppStateService } from '../../../services/app-state.service';
+import { RoleService } from '../../../auth/roles/role.service';
+import { LoggerService } from '../../../services/logger.service';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'login-form',
@@ -52,28 +52,21 @@ export class LoginComponent {
 
     this.authService.login({ username, password }).subscribe({
       next: (response) => {
-        localStorage.setItem('access_token', response.access_token);
+        this.authService.saveToken(response.access_token);
         this.appstate.setUserState(username);
         this.appstate.setLoggedState(true);
         this.navbarService.updateLoginHref('micuenta');
         this.cdr.detectChanges();
 
         // Carga los roles desde el token JWT
-        this.roleService.loadRolesFromToken(response.access_token);
-
-        // Opcional: Verifica los roles del usuario
-        this.logger.log(
-          this.context,
-          'Roles cargados:',
-          this.roleService.getRoles()
-        );
-
+        this.roleService.loadRolesFromToken();
         this.router.navigate(['/home']); // Redirigir a la página principal o a donde quieras
       },
       error: (error) => {
         this.error = 'Error de inicio de sesión ' + error;
-        this.logger.log(this.context, this.error);
         this.loading = false;
+        this.logger.log(this.context, this.error);
+
         this.cdr.detectChanges();
       },
     });
