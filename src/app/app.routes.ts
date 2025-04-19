@@ -1,16 +1,13 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './views/home/home.component';
 import { ModalComponent } from './components/modal/modal.component';
-import { RegisterComponent } from './auth/register/register.component';
-import { TableroanunciosComponent } from './views/tableroanuncios/tableroanuncios.component';
+import { RegisterComponent } from './views/register/register.component';
 import { AdminComponent } from './test endpoints/admin/admin.component';
 import { RoleGuard } from './auth/guards/role.guard';
 import { UnauthorizedComponent } from './views/unauthorized/unauthorized.component';
 import { NotFoundComponent } from './views/not-found/not-found.component';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { FilePreviewComponent } from './views/pdf-preview/file-preview.component';
-import { CrearAnuncioComponent } from './views/tableroanuncios/forms/crear-anuncio.component';
-import { EditarAnuncioComponent } from './views/tableroanuncios/forms/editar-anuncio.component';
 import { gruposServiciodelcampoComponent } from './views/grupos-serviciodelcampo/grupos-serviciodelcampo.component';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { MicuentaComponent } from './views/micuenta/micuenta.component';
@@ -19,12 +16,14 @@ import { NotificationComponent } from './views/notifications/notification.compon
 import { BooksGridComponent } from './views/lectura-biblia/books-grid.component';
 import { ChatWebsocketComponent } from './components/chatwebsocket/chat-websocket.component';
 import { IniciarSesionComponent } from './views/iniciar-sesion/iniciar-sesion.component';
+import { tableroAnunciosRoutes } from './routes/tablero-anuncios.routes';
+import { loginRoutes } from './routes/login.routes';
 
-export const routes: Routes = [
+export const appRoutes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'home', component: HomeComponent },
   { path: 'modal', component: ModalComponent },
-  { path: 'login', component: IniciarSesionComponent },
+  ...loginRoutes,
   { path: 'register', component: RegisterComponent },
   {
     path: 'micuenta',
@@ -32,24 +31,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard, RoleGuard],
     data: { roles: ['user'] },
   },
-  {
-    path: 'tablero-anuncios',
-    component: TableroanunciosComponent,
-    canActivate: [AuthGuard, RoleGuard],
-    data: { roles: ['user'] },
-  },
-  {
-    path: 'tablero-anuncios/crear-anuncio',
-    component: CrearAnuncioComponent,
-    canActivate: [AuthGuard, RoleGuard],
-    data: { roles: ['admin', 'user'] },
-  },
-  {
-    path: 'tablero-anuncios/editar-anuncio/:id',
-    component: EditarAnuncioComponent,
-    canActivate: [AuthGuard, RoleGuard],
-    data: { roles: ['admin', 'user'] },
-  },
+
   {
     path: 'pdf-preview',
     component: FilePreviewComponent,
@@ -99,6 +81,8 @@ export const routes: Routes = [
     path: 'chatwebsocket',
     component: ChatWebsocketComponent,
   },
+
+  ...tableroAnunciosRoutes,
 
   // deben estar al final
   { path: 'unauthorized', component: UnauthorizedComponent },

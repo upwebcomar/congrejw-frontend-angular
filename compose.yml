@@ -15,7 +15,8 @@ services:
       - ALLOWED_DOMAINS=http://localhost
       - DISALLOWED_ROUTES=http://localhost/auth/login
 
-    command: /bin/sh -c "/start.sh" # configura variable de entorno para sw.js y env.js
+    # command: /bin/sh -c "/start.sh" # configura variable de entorno para sw.js y env.js
+    command: /bin/sh -c "ls -l /start.sh && cat -A /start.sh && /start.sh"
 
     networks:
       - proxy

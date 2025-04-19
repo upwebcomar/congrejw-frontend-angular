@@ -6,12 +6,13 @@ import { LoggerService } from '../../services/logger.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../../auth/auth.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { MessageService } from '../../services/messages.services';
 
 @Component({
-    selector: 'app-file-preview',
-    imports: [CommonModule, PdfViewerComponent],
-    templateUrl: './file-preview.component.html',
-    styles: []
+  selector: 'app-file-preview',
+  imports: [CommonModule, PdfViewerComponent],
+  templateUrl: './file-preview.component.html',
+  styles: [],
 })
 export class FilePreviewComponent implements OnInit {
   context: string = 'FilePreviewComponent';
@@ -22,13 +23,15 @@ export class FilePreviewComponent implements OnInit {
   showAll: boolean = false; // Mostrar todas las páginas o una sola
   imageUrl!: SafeUrl;
   loadingImage: boolean = true;
+  objectUrlRef!: string; // solo para poder revocar más tarde
 
   constructor(
     private route: ActivatedRoute,
     private logger: LoggerService,
     private authService: AuthService,
     private http: HttpClient,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private message: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -57,6 +60,12 @@ export class FilePreviewComponent implements OnInit {
 
     // Configurar zoom según el ancho de la pantalla
     this.adjustZoomToScreenWidth();
+  }
+  ngOnDestroy(): void {
+    // revocar el blob para que no haya fuga de memoria
+    if (this.objectUrlRef) {
+      URL.revokeObjectURL(this.objectUrlRef);
+    }
   }
 
   // Función para obtener la extensión del archivo
@@ -100,11 +109,14 @@ export class FilePreviewComponent implements OnInit {
 
     this.http.get(this.fileSrc, { headers, responseType: 'blob' }).subscribe({
       next: (blob: Blob) => {
-        const objectURL = URL.createObjectURL(blob);
-        this.imageUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+        this.objectUrlRef = URL.createObjectURL(blob);
+        this.imageUrl = this.sanitizer.bypassSecurityTrustUrl(
+          this.objectUrlRef
+        );
       },
       error: (error) => {
         console.error('Error al cargar la imagen', error);
+        this.message.alert('Error al cargar el archivo');
       },
     });
   }

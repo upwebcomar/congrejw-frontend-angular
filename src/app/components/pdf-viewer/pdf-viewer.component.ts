@@ -5,12 +5,13 @@ import { GlobalWorkerOptions } from 'pdfjs-dist';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PdfService } from './pdf.service';
+import { MessageService } from '../../services/messages.services';
 
 @Component({
-    selector: 'app-pdf-viewer',
-    imports: [CommonModule, PdfViewerModule],
-    templateUrl: './pdf-viewer.component.html',
-    styleUrls: ['./pdf-viewer.component.css']
+  selector: 'app-pdf-viewer',
+  imports: [CommonModule, PdfViewerModule],
+  templateUrl: './pdf-viewer.component.html',
+  styleUrls: ['./pdf-viewer.component.css'],
 })
 export class PdfViewerComponent {
   @Input() pdfSrc!: string; // Ruta del PDF
@@ -24,12 +25,12 @@ export class PdfViewerComponent {
   private lastTouchDistance: number | null = null; // Para detectar el gesto de pellizcar
   private initialZoom: number = 1; // Para el zoom táctil gradual
 
-
   constructor(
     private el: ElementRef,
     private renderer: Renderer2,
     private router: Router, // Inyectamos el servicio Router
-    private pdfService:PdfService
+    private pdfService: PdfService,
+    private message: MessageService
   ) {
     // Configuración del worker de PDF.js
     GlobalWorkerOptions.workerSrc = '/assets/pdfjs/pdf.worker.min.js';
@@ -44,7 +45,6 @@ export class PdfViewerComponent {
     this.renderer.listen(el, 'touchstart', this.onTouchStart.bind(this));
     this.renderer.listen(el, 'touchmove', this.onTouchMove.bind(this));
     this.renderer.listen(el, 'touchend', this.onTouchEnd.bind(this));
-
   }
   // Método para cargar el PDF
   loadPdf(): void {
@@ -58,10 +58,10 @@ export class PdfViewerComponent {
         this.isLoading = false;
         this.hasError = true;
         console.error('Error al cargar el PDF:', error);
+        this.message.alert('Error al cargar el archivo');
       }
     );
   }
-
 
   // Evento que se ejecuta cuando el PDF ha terminado de cargarse
   onPdfLoaded(): void {
@@ -129,10 +129,10 @@ export class PdfViewerComponent {
     return Math.sqrt(dx * dx + dy * dy);
   }
 
-    // Limpia la URL del Blob cuando se destruye el componente
-    ngOnDestroy(): void {
-      if (this.pdfBlobUrl) {
-        URL.revokeObjectURL(this.pdfBlobUrl);
-      }
+  // Limpia la URL del Blob cuando se destruye el componente
+  ngOnDestroy(): void {
+    if (this.pdfBlobUrl) {
+      URL.revokeObjectURL(this.pdfBlobUrl);
     }
+  }
 }

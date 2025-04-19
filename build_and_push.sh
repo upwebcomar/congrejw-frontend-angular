@@ -16,7 +16,7 @@ log "Iniciando el proceso de construcción de la imagen Docker..."
 
 # Construir la imagen
 log "Construyendo la imagen Docker: $IMAGE_NAME:$TAG"
-docker build -t $IMAGE_NAME:$TAG .
+docker build -t $IMAGE_NAME:$TAG . #docker build --no-cache -t $IMAGE_NAME:$TAG . con no-cache hace build desde cero
 
 log "Imagen construida exitosamente."
 
