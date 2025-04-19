@@ -4,40 +4,49 @@ import { JwtPayload } from '../jwt-payload.interface';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
+import { AuthService } from '../auth.service';
+import { LoggerService } from '../../services/logger.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RoleService {
   // Roles del usuario presentes en el payload del usuario
+  private context = 'RoleService';
   private roles: string[] = []; // Propiedad para almacenar los roles
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private authSevice: AuthService,
+    private logger: LoggerService
+  ) {
     const token = this.getToken(); // Intenta recuperar el token al iniciar
     if (token) {
-      this.loadRolesFromToken(token); // Si hay token, carga los roles
+      this.loadRolesFromToken(); // Si hay token, carga los roles
     }
   }
 
-  // Almacenar el token en localStorage
-  storeToken(token: string): void {
-    localStorage.setItem('access_token', token); // Almacena el token
-    this.loadRolesFromToken(token); // Carga los roles desde el token
-  }
-
   // Recuperar el token desde localStorage
-  getToken(): string | null {
-    return localStorage.getItem('access_token'); // Recupera el token
+  private getToken(): string | null {
+    return this.authSevice.getToken();
   }
-
   // Cargar los roles desde el token JWT
-  loadRolesFromToken(token: string): void {
-    try {
-      const decodedToken: any = jwtDecode(token); // Decodifica el token
-      this.roles = decodedToken.roles || []; // Asigna los roles desde el payload
-    } catch (error) {
-      console.error('Error al decodificar el token:', error);
-      this.roles = [];
+  loadRolesFromToken(): void {
+    const token = this.authSevice.getToken();
+    if (token) {
+      try {
+        const decodedToken: any = jwtDecode(token); // Decodifica el token
+        this.roles = decodedToken.roles || []; // Asigna los roles desde el payload
+      } catch (error) {
+        this.logger.error(
+          this.context,
+          'Error al decodificar el token:',
+          error
+        );
+        this.roles = [];
+      }
+    } else {
+      this.logger.error(this.context, 'Error: No hay token');
     }
   }
   // Cargar la data desde el token JWT

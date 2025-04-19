@@ -1,9 +1,17 @@
-import { ApplicationConfig, provideZoneChangeDetection, importProvidersFrom } from '@angular/core';
+import {
+  ApplicationConfig,
+  provideZoneChangeDetection,
+  importProvidersFrom,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient, HTTP_INTERCEPTORS, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  provideHttpClient,
+  HTTP_INTERCEPTORS,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { JwtModule } from '@auth0/angular-jwt';
 
-import { routes } from './app.routes';
+import { appRoutes } from './app.routes';
 import { environment } from '../environments/environment';
 import { AuthInterceptor } from './auth/auth.interceptor';
 
@@ -14,7 +22,7 @@ export function tokenGetter() {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
+    provideRouter(appRoutes),
     // Usa withInterceptorsFromDi para manejar interceptores de inyección de dependencias
     provideHttpClient(withInterceptorsFromDi()),
     // Registrar el AuthInterceptor usando HTTP_INTERCEPTORS

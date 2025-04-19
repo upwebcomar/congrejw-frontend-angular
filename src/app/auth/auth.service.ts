@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { RegisterDto } from './dto/register.dto';
 import { environment } from '../../environments/environment';
 import { jwtDecode } from 'jwt-decode';
 import { JwtPayload } from './jwt-payload.interface';
@@ -20,10 +19,6 @@ export class AuthService {
     );
   }
 
-  saveToken(token: string) {
-    localStorage.setItem('access_token', token);
-  }
-
   getToken() {
     if (this.isTokenValid()) {
       return this.getTokenSaveInStorage();
@@ -34,10 +29,6 @@ export class AuthService {
   private getTokenSaveInStorage() {
     const token = localStorage.getItem('access_token');
     return token;
-  }
-
-  register(credentials: RegisterDto) {
-    return this.http.post(`${this.apiUrl}/auth/register`, credentials);
   }
 
   isTokenValid(): boolean {
@@ -55,8 +46,12 @@ export class AuthService {
 
   logout() {
     this.removeToken();
+    //this.appState.setLoggedState(false);
   }
 
+  saveToken(token: string) {
+    localStorage.setItem('access_token', token);
+  }
   removeToken() {
     localStorage.removeItem('access_token');
   }

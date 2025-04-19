@@ -22,7 +22,7 @@ export class AppStateService {
     private authService: AuthService
   ) {
     this.logger.log(this.context, 'AppStateService funcionando');
-    const token = this.roleService.getToken();
+    const token = this.authService.getToken();
     if (token && this.authService.isTokenValid()) {
       const payload = this.roleService.loadDataFromToken(token);
       if (payload != undefined) {
